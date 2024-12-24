@@ -39,3 +39,16 @@ export interface BackendResponse {
   content: string; // Markdown content with references
   tasks?: Task[]; // Optional tasks array
 }
+
+export interface Conversation {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+  messages: Message[];
+}
+
+export interface ConversationStore {
+  conversations: Conversation[];
+  activeConversationId: string | null;
+}

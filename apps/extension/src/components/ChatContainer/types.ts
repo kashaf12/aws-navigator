@@ -1,5 +1,8 @@
+import { Conversation } from "@/types/chat";
+
 export interface ChatContainerProps {
-  initialMessage?: string;
+  conversation: Conversation;
   className?: string;
   onHighlight?: (selectors: string[]) => void;
+  onUpdate: (updatedConversation: Conversation) => void;
 }

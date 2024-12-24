@@ -1,8 +1,6 @@
-import React from "react";
-
 import classes from "./styles.module.css";
 
-const TypingIndicator: React.FC = () => {
+const TypingIndicator = () => {
   return (
     <div className={classes.typingIndicator}>
       <div className={classes.typingDot} />
