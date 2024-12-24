@@ -12,7 +12,9 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare"
+    "postinstall": "wxt prepare",
+    "lint": "eslint \"src/**/*.ts\"",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "react": "^19.0.0",
@@ -20,11 +22,13 @@
   },
   "devDependencies": {
     "@aws-navigator/typescript-config": "workspace:*",
+    "@aws-navigator/eslint-config": "workspace:*",
     "@types/chrome": "^0.0.280",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.2",
     "@wxt-dev/module-react": "^1.1.2",
     "typescript": "^5.6.3",
+    "eslint": "^8.57.0",
     "wxt": "^0.19.13"
   }
 }
