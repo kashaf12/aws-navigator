@@ -1,0 +1,14 @@
+{
+  "name": "@aws-navigator/schemas",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.ts",
+  "dependencies": {
+    "zod": "^3.24.1"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

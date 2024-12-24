@@ -1,0 +1,8 @@
+ .errorMessageContainer {
+     padding: 16px;
+     background-color: #fdf2f2;
+     border: 1px solid #f5c6cb;
+     border-radius: 4px;
+     color: #721c24;
+     margin: 8px
+ }

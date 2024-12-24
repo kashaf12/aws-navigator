@@ -5,4 +5,10 @@ export default defineConfig({
   extensionApi: "chrome",
   modules: ["@wxt-dev/module-react"],
   srcDir: "src",
+  manifest: {
+    name: "AWS Navigator",
+    description: "AI-powered assistant for AWS Console",
+    permissions: ["activeTab"],
+    host_permissions: ["https://*.console.aws.amazon.com/*"],
+  },
 });

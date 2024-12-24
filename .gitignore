@@ -44,3 +44,9 @@ stats.html
 stats-*.json
 .wxt
 web-ext.config.ts
+
+repopack*
+.DS_Store
+.output
+.turbo
+repopack-output.txt

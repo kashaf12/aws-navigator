@@ -1,0 +1,33 @@
+.warningContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    height: 100%;
+    text-align: center;
+}
+
+.warningTitle {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--primary-color);
+}
+
+.warningMessage {
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.warningLink {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.warningLink:hover {
+    text-decoration: underline;
+}
