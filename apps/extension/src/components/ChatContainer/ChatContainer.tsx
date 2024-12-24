@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { Message, Step, BackendResponse } from "../../types/chat";
+import { Message } from "../../types/chat";
 import ChatMessage from "../ChatMessage";
 import TypingIndicator from "../TypingIndicator";
 import classes from "./styles.module.css";
 import { ChatContainerProps } from "./types";
 import ChatInput from "../ChatInput";
+import { Task } from "@aws-navigator/schemas";
+import { mockBackendResponse } from "./mock";
 
 const ChatContainer = ({
   initialMessage = "Hello! I'm your AWS Navigator assistant. How can I help you today?",
@@ -30,44 +32,46 @@ const ChatContainer = ({
     scrollToBottom();
   }, [messages]);
 
-  const handleHighlight = (steps: Step[]) => {
-    const selectors = steps
-      .filter((step) => step.selector)
-      .map((step) => step.selector as string);
+  const handleHighlight = (task: Task) => {
+    // Extract all unique CSS selectors from the task's steps and UI elements
+    const selectors = task.steps.flatMap((step) =>
+      step.ui_elements.map((element) => element.identifier.css_selector)
+    );
 
-    if (selectors.length > 0 && onHighlight) {
-      onHighlight(selectors);
-    }
-  };
+    const uniqueSelectors = [...new Set(selectors)];
 
-  const mockBackendResponse = async (
-    content: string,
-  ): Promise<BackendResponse> => {
-    // Example mock response - replace with actual API call
-    if (content.toLowerCase().includes("create s3 bucket")) {
-      return {
-        type: "steps",
-        message: "Here's how to create an S3 bucket:",
-        steps: [
-          {
-            id: "1",
-            description: "Open the S3 Console",
-            selector: "#s3-console-btn",
-          },
-          {
-            id: "2",
-            description: 'Click "Create bucket"',
-            selector: "#create-bucket-btn",
-          },
-          // ... more steps
-        ],
-      };
+    if (uniqueSelectors.length > 0 && onHighlight) {
+      onHighlight(uniqueSelectors);
     }
 
-    return {
-      type: "conversation",
-      message: `I'll help you with that: ${content}`,
-    };
+    // Optionally: Check preconditions before highlighting
+    task.steps.forEach((step) => {
+      if (step.preconditions) {
+        const { current_url_contains, ui_element_exists } = step.preconditions;
+
+        // Check URL condition
+        if (
+          current_url_contains &&
+          !window.location.href.includes(current_url_contains)
+        ) {
+          console.warn(
+            `Warning: Current URL does not match required path: ${current_url_contains}`
+          );
+        }
+
+        // Check UI element existence
+        if (ui_element_exists?.css_selector) {
+          const elementExists = document.querySelector(
+            ui_element_exists.css_selector
+          );
+          if (!elementExists) {
+            console.warn(
+              `Warning: Required UI element not found: ${ui_element_exists.css_selector}`
+            );
+          }
+        }
+      }
+    });
   };
 
   const handleSendMessage = async (content: string) => {
@@ -87,14 +91,26 @@ const ChatContainer = ({
       const assistantMessage: Message = {
         id: messages.length + 2,
         type: "assistant",
-        content: response.message,
+        content: response.content,
         timestamp: new Date(),
-        steps: response.type === "steps" ? response.steps : undefined,
+        tasks: response.tasks,
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
+      // Handle error case
       console.error("Error getting response:", error);
+
+      // Add error message
+      const errorMessage: Message = {
+        id: messages.length + 2,
+        type: "assistant",
+        content:
+          "I apologize, but I encountered an error processing your request. Please try again or rephrase your question.",
+        timestamp: new Date(),
+      };
+
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsTyping(false);
     }
@@ -107,7 +123,7 @@ const ChatContainer = ({
           <ChatMessage
             key={message.id}
             message={message}
-            onHighlight={handleHighlight}
+            onStartTask={handleHighlight}
           />
         ))}
         {isTyping && <TypingIndicator />}
