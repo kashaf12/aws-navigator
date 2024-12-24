@@ -1,6 +1,7 @@
-import { Message, Step } from "@/types/chat";
+import { Message } from "@/types/chat";
+import { Task } from "@aws-navigator/schemas";
 
 export interface ChatMessageProps {
   message: Message;
-  onHighlight?: (steps: Step[]) => void;
+  onStartTask?: (task: Task) => void;
 }

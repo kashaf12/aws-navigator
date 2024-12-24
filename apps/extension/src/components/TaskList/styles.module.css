@@ -1,0 +1,17 @@
+.tasksContainer {
+    margin-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1rem;
+}
+
+.tasksTitle {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.tasksList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}

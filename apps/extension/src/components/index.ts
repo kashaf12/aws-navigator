@@ -1,7 +1,7 @@
-export * from "./ChatContainer";
-export * from "./ChatInput";
-export * from "./ChatMessage";
-export * from "./ErrorMessage";
-export * from "./NotAWSWarning";
-export * from "./TypingIndicator";
-export * from "./App";
+export { default as ChatContainer } from "./ChatContainer";
+export { default as ChatInput } from "./ChatInput";
+export { default as ChatMessage } from "./ChatMessage";
+export { default as ErrorMessage } from "./ErrorMessage";
+export { default as NotAWSWarning } from "./NotAWSWarning";
+export { default as TypingIndicator } from "./TypingIndicator";
+export { default as App } from "./App";

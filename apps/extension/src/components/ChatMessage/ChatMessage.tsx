@@ -1,38 +1,25 @@
-import classes from "./styles.module.css";
 import { ChatMessageProps } from "./types";
+import classes from "./styles.module.css";
+import MarkdownContent from "../MarkdownContent";
+import TaskList from "../TaskList";
+import Timestamp from "../Timestamp";
 
-const ChatMessage = ({ message, onHighlight }: ChatMessageProps) => {
-  console.log({ message });
+const ChatMessage = ({
+  message,
+  onStartTask = () => null,
+}: ChatMessageProps) => {
   return (
     <div className={`${classes.messageWrapper} ${classes[`${message.type}`]}`}>
       <div className={classes.messageContent}>
-        <p className={classes.messageText}>{message.content}</p>
+        <div className={classes.messageText}>
+          <MarkdownContent content={message.content} />
+        </div>
 
-        {message.steps && (
-          <div className={classes.stepsContainer}>
-            <ol className={classes.stepsList}>
-              {message.steps.map((step) => (
-                <li key={step.id} className={classes.stepItem}>
-                  {step.description}
-                </li>
-              ))}
-            </ol>
-
-            <button
-              onClick={() => onHighlight?.(message.steps!)}
-              className={classes.highlightButton}
-            >
-              Highlight on Browser
-            </button>
-          </div>
+        {message.tasks && message.tasks.length > 0 && (
+          <TaskList tasks={message.tasks} onStartTask={onStartTask} />
         )}
 
-        <span className={classes.timestamp}>
-          {message.timestamp.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </span>
+        <Timestamp date={message.timestamp} />
       </div>
     </div>
   );
