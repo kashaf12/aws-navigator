@@ -7,24 +7,7 @@
     gap: 1.5rem;
     align-items: center;
     justify-content: center;
-}
 
-.newChatButton {
-    padding: 10px 20px;
-    margin: 20px;
-    background-color: #2563eb;
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-}
-
-.newChatButton:hover {
-    background-color: #1d4ed8;
-    transform: scale(1.05);
 }
 
 .emptyState h2 {

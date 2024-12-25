@@ -1,8 +1,10 @@
+import { Conversation, Message } from "@/types/chat";
 import ChatContainer from "../ChatContainer";
-import ConversationEmptyState from "../ConversationEmptyState";
 import ConversationList from "../ConversationList";
 import classes from "./styles.module.css";
 import { useConversations } from "@/hooks";
+import { generateConversationName } from "@/utils/utils";
+import { mockBackendResponse } from "../ChatContainer/mock";
 
 const ChatDashboard = () => {
   const {
@@ -12,21 +14,15 @@ const ChatDashboard = () => {
     activeConversationId,
     updateActiveConversation,
   } = useConversations();
+  const [isTyping, setIsTyping] = useState(false);
 
-  const [syncing, setSyncing] = useState(false);
+  const handleOnNewChat = async () => {
+    await updateActiveConversation(null);
+  };
 
-  const handleAddConversation = async () => {
-    setSyncing(true);
-    const newConversation = {
-      id: crypto.randomUUID(),
-      name: "New Conversation",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      messages: [],
-    };
-    await addOrUpdateConversation(newConversation);
-    await updateActiveConversation(newConversation.id);
-    setSyncing(false);
+  const handleOnAddUpdateChat = async (conversation: Conversation) => {
+    await addOrUpdateConversation(conversation);
+    await updateActiveConversation(conversation.id);
   };
 
   const handleHighlight = (selectors: string[]) => {
@@ -43,29 +39,90 @@ const ChatDashboard = () => {
     (conv) => conv.id === activeConversationId
   );
 
+  const handleSendMessage = async (content: string) => {
+    if (!content.trim()) return; // Prevent sending empty messages
+
+    const currentConversation = activeConversation || {
+      id: crypto.randomUUID(),
+      name: generateConversationName(content),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      messages: [],
+    };
+
+    const userMessage: Message = {
+      id: currentConversation?.messages?.length + 1,
+      type: "user",
+      content,
+      timestamp: new Date(),
+    };
+
+    const updatedMessages = [
+      ...(currentConversation?.messages || []),
+      userMessage,
+    ];
+
+    handleOnAddUpdateChat({
+      ...currentConversation,
+      messages: updatedMessages,
+      updatedAt: new Date(),
+    });
+
+    setIsTyping(true);
+
+    try {
+      const response = await mockBackendResponse(content);
+
+      const assistantMessage: Message = {
+        id: currentConversation.messages.length + 2,
+        type: "assistant",
+        content: response.content,
+        timestamp: new Date(),
+        tasks: response.tasks,
+      };
+
+      handleOnAddUpdateChat({
+        ...currentConversation,
+        messages: [...updatedMessages, assistantMessage],
+        updatedAt: new Date(),
+      });
+    } catch (error) {
+      console.error("Error getting response:", error);
+
+      const errorMessage: Message = {
+        id: currentConversation.messages.length + 2,
+        type: "assistant",
+        content:
+          "I encountered an error processing your request. Please try again.",
+        timestamp: new Date(),
+      };
+
+      handleOnAddUpdateChat({
+        ...currentConversation,
+        messages: [...updatedMessages, errorMessage],
+        updatedAt: new Date(),
+      });
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
   return (
     <>
       <ConversationList
         conversations={conversations}
         activeConversationId={activeConversationId}
         onConversationSelect={updateActiveConversation}
-        onNewChat={handleAddConversation}
+        onNewChat={handleOnNewChat}
         onDelete={deleteConversation}
-        syncing={syncing}
       />
       <div className={classes.contentArea}>
-        {activeConversation ? (
-          <ChatContainer
-            conversation={activeConversation}
-            onHighlight={handleHighlight}
-            onUpdate={addOrUpdateConversation}
-          />
-        ) : (
-          <ConversationEmptyState
-            onNewChat={handleAddConversation}
-            isConversationListEmpty={conversations.length === 0}
-          />
-        )}
+        <ChatContainer
+          conversation={activeConversation}
+          onHighlight={handleHighlight}
+          onSend={handleSendMessage}
+          isTyping={isTyping}
+        />
       </div>
     </>
   );

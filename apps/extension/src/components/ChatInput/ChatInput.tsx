@@ -1,8 +1,11 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, forwardRef, ForwardedRef } from "react";
 import { ChatInputProps } from "./types";
 import classes from "./styles.module.css";
 
-const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
+const ChatInput = (
+  { onSendMessage, disabled }: ChatInputProps,
+  ref: ForwardedRef<HTMLInputElement>
+) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: FormEvent) => {
@@ -23,6 +26,7 @@ const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
           placeholder="Type your AWS question here..."
           disabled={disabled}
           className={classes.messageInput}
+          ref={ref}
         />
         <button
           type="submit"
@@ -36,4 +40,4 @@ const ChatInput = ({ onSendMessage, disabled }: ChatInputProps) => {
   );
 };
 
-export default ChatInput;
+export default forwardRef(ChatInput);

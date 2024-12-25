@@ -6,5 +6,4 @@ export interface ConversationListProps {
   onConversationSelect: (conversationId: string) => void;
   onNewChat: () => void;
   onDelete: (conversationId: string) => void;
-  syncing?: boolean;
 }
