@@ -8,7 +8,8 @@ export default defineConfig({
   manifest: {
     name: "AWS Navigator",
     description: "AI-powered assistant for AWS Console",
-    permissions: ["activeTab"],
+    permissions: ["activeTab", "sidePanel", "storage"],
     host_permissions: ["https://*.console.aws.amazon.com/*"],
+    action: {},
   },
 });

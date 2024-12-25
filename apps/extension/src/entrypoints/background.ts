@@ -3,6 +3,10 @@ export default defineBackground(() => {
     id: browser.runtime.id,
   });
 
+  browser.sidePanel
+    .setPanelBehavior({ openPanelOnActionClick: true })
+    .catch((error: unknown) => console.error(error));
+
   // Listen for installation
   chrome.runtime.onInstalled.addListener((details) => {
     console.log("[AWS Navigator] Extension Installed/Updated", details);
