@@ -1,4 +1,3 @@
-import { useView } from "@/hooks";
 import classes from "./styles.module.css";
 import {
   FileText,
@@ -10,6 +9,7 @@ import {
 } from "lucide-react";
 import Tooltip from "../Tooltip";
 import { ViewType } from "@/contexts";
+import { useConversations, useView } from "@/hooks";
 
 export const navigationItems = [
   {
@@ -51,6 +51,7 @@ export const navigationItems = [
 
 const Navigation = () => {
   const { activeView, setActiveView } = useView();
+  const { updateActiveConversation } = useConversations();
 
   const topItems = navigationItems.filter((item) => item.position === "top");
   const bottomItems = navigationItems.filter(
@@ -62,7 +63,10 @@ const Navigation = () => {
       <div className={classes.topItems}>
         <Tooltip content={"New Chat"} position="right" delay={300}>
           <button
-            // onClick={() => setActiveView(id)}
+            onClick={() => {
+              updateActiveConversation(null);
+              setActiveView(ViewType.CurrentChat);
+            }}
             className={`${classes.navButton} ${classes.accentButton}`}
             title={"New"}
           >

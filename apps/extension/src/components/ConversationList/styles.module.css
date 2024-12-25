@@ -1,9 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    width: 240px;
-    border-right: 1px solid #e5e7eb;
-    /* background-color: #f9fafb; */
+    width: 100%;
 }
 
 .newChatButton {
@@ -97,4 +95,14 @@
 
 .deleteButton:hover {
     color: #ef4444;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    text-align: center;
 }
