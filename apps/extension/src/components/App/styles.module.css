@@ -6,33 +6,6 @@
     background-color: #ffffff;
 }
 
-.appHeader {
-    padding: 16px;
-    border-bottom: 1px solid #e2e8f0;
-    display: flex;
-    align-items: center;
-}
-
-.appTitle {
-    margin: 0;
-    font-size: 20px;
-    font-weight: 600;
-    color: #232f3e;
-}
-
-.appMain {
-    flex: 1;
-    display: flex;
-    overflow: hidden;
-}
-
-.contentArea {
-    flex: 1;
-    display: flex;
-    min-width: 0;
-    /* Prevents flex child from overflowing */
-}
-
 .loading {
     display: flex;
     justify-content: center;

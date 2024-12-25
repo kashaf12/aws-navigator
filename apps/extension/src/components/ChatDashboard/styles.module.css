@@ -1,0 +1,6 @@
+.contentArea {
+    flex: 1;
+    display: flex;
+    min-width: 0;
+    /* Prevents flex child from overflowing */
+}
