@@ -4,7 +4,7 @@ import ConversationList from "../ConversationList";
 import classes from "./styles.module.css";
 import { useConversations } from "@/hooks";
 import { generateConversationName } from "@/utils/utils";
-import { mockBackendResponse } from "../ChatContainer/mock";
+import { mockBackendResponse } from "./mock";
 
 const ChatDashboard = () => {
   const {
