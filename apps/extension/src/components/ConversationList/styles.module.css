@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 240px;
     border-right: 1px solid #e5e7eb;
-    background-color: #f9fafb;
+    /* background-color: #f9fafb; */
 }
 
 .newChatButton {

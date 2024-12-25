@@ -1,7 +1,6 @@
 .chatContainer {
     display: flex;
     flex-direction: column;
-    height: 500px;
     background-color: #ffffff;
     border-radius: 0.5rem;
     overflow: hidden;

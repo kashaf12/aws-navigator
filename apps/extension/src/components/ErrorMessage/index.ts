@@ -1,3 +1,3 @@
-import ErrorMessage from "./ErrorMessage";
+export { default } from "./ErrorMessage";
 
-export default ErrorMessage;
+export * from "./types";

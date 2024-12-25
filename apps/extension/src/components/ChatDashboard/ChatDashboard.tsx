@@ -1,6 +1,5 @@
-import { Conversation, Message } from "@/types/chat";
+import { Conversation, Message } from "@/types";
 import ChatContainer from "../ChatContainer";
-import ConversationList from "../ConversationList";
 import classes from "./styles.module.css";
 import { useConversations } from "@/hooks";
 import { generateConversationName } from "@/utils/utils";
@@ -10,15 +9,10 @@ const ChatDashboard = () => {
   const {
     conversations,
     addOrUpdateConversation,
-    deleteConversation,
     activeConversationId,
     updateActiveConversation,
   } = useConversations();
   const [isTyping, setIsTyping] = useState(false);
-
-  const handleOnNewChat = async () => {
-    await updateActiveConversation(null);
-  };
 
   const handleOnAddUpdateChat = async (conversation: Conversation) => {
     await addOrUpdateConversation(conversation);
@@ -109,13 +103,6 @@ const ChatDashboard = () => {
 
   return (
     <>
-      <ConversationList
-        conversations={conversations}
-        activeConversationId={activeConversationId}
-        onConversationSelect={updateActiveConversation}
-        onNewChat={handleOnNewChat}
-        onDelete={deleteConversation}
-      />
       <div className={classes.contentArea}>
         <ChatContainer
           conversation={activeConversation}

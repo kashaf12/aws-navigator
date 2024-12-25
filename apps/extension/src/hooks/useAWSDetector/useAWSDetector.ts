@@ -7,33 +7,42 @@ const useAWSDetector = () => {
   const [error, setError] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("[AWS Navigator] Popup Opened");
-
-    try {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        const currentTab = tabs[0];
-        const url = currentTab?.url || "";
+    const checkCurrentTab = async () => {
+      try {
+        const [tab] = await chrome.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+        const url = tab?.url || "";
         console.log("[AWS Navigator] Current Tab URL:", url);
+        setIsAWS(isAWSConsole(url));
+      } catch (err) {
+        console.error("[AWS Navigator] Tab Query Error:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-        const isAWSTab = isAWSConsole(url);
-        console.log("[AWS Navigator] Is AWS Console Tab:", isAWSTab);
+    // Listen for tab update messages from background script
+    const messageListener = (message: {
+      type: string;
+      data: { isAWS: boolean; url: string };
+    }) => {
+      if (message.type === BACKGROUND_MESSAGE_TOPIC.TAB_UPDATE) {
+        checkCurrentTab();
+      }
+    };
 
-        setIsAWS(isAWSTab);
-      });
+    // Initial check
+    checkCurrentTab();
 
-      // Example of sending message to background
-      chrome.runtime.sendMessage({ type: "POPUP_OPENED" }, (response) =>
-        console.log("[AWS Navigator] Background Response:", response)
-      );
-    } catch (err) {
-      console.error("[AWS Navigator] Popup Error:", err);
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+    // Set up message listener
+    chrome.runtime.onMessage.addListener(messageListener);
 
+    // Cleanup
     return () => {
-      console.log("[AWS Navigator] Popup Closed");
+      chrome.runtime.onMessage.removeListener(messageListener);
     };
   }, []);
 

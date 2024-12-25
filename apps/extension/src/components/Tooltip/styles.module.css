@@ -1,0 +1,61 @@
+.tooltipTrigger {
+    display: inline-block;
+    position: relative;
+}
+
+.tooltip {
+    position: fixed;
+    z-index: 1000;
+    padding: 8px 12px;
+    background-color: #232f3e;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    pointer-events: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.arrow {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #232f3e;
+    transform: rotate(45deg);
+}
+
+/* Position specific styles */
+.tooltip.top .arrow {
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.tooltip.bottom .arrow {
+    top: -4px;
+    left: 50%;
+    margin-left: -4px;
+}
+
+.tooltip.left .arrow {
+    right: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+.tooltip.right .arrow {
+    left: -4px;
+    top: 50%;
+    margin-top: -4px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

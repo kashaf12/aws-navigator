@@ -1,23 +1,23 @@
-import NotAWSWarning from "../NotAWSWarning";
-import ErrorMessage from "../ErrorMessage";
 import classes from "./styles.module.css";
-import { useAWSDetector } from "@/hooks";
 import AppContent from "../AppContent";
+import { ConversationProvider, ViewProvider } from "@/contexts";
+import Header from "../Header";
+import Navigation from "../Navigation";
 
 const App = () => {
-  const { isAWS, loading, error } = useAWSDetector();
-
-  if (loading) {
-    return <div className={classes.loading}>Loading...</div>;
-  }
-
-  if (error) {
-    return <ErrorMessage />;
-  }
-
   return (
-    <div className={classes.appContainer}>
-      {isAWS ? <AppContent /> : <NotAWSWarning />}
+    <div className={classes.container}>
+      <ConversationProvider>
+        <ViewProvider>
+          <Header title="AWS Navigator" />
+          <div className={classes.layout}>
+            <Navigation />
+            <div className={classes.content}>
+              <AppContent />
+            </div>
+          </div>
+        </ViewProvider>
+      </ConversationProvider>
     </div>
   );
 };

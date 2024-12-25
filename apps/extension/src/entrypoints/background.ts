@@ -7,30 +7,37 @@ export default defineBackground(() => {
     .setPanelBehavior({ openPanelOnActionClick: true })
     .catch((error: unknown) => console.error(error));
 
-  // Listen for installation
-  chrome.runtime.onInstalled.addListener((details) => {
-    console.log("[AWS Navigator] Extension Installed/Updated", details);
-  });
+  // Function to check if tab is AWS and notify sidepanel
+  const checkAndNotifyTabUpdate = async () => {
+    try {
+      // Notify all sidepanel instances about the change
+      chrome.runtime
+        .sendMessage({
+          type: BACKGROUND_MESSAGE_TOPIC.TAB_UPDATE,
+        })
+        .catch((error) => {
+          // Handle error if sidepanel is not open
+          console.log("[AWS Navigator] No sidepanel listening:", error);
+        });
+    } catch (error) {
+      console.error("[AWS Navigator] Error checking tab:", error);
+    }
+  };
 
   // Listen for tab updates
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    console.log("[AWS Navigator] Tab Updated:", {
-      tabId,
-      changeInfo,
-      url: tab.url,
-    });
-
-    if (changeInfo.status === "complete" && tab.url) {
-      console.log("[AWS Navigator] Is AWS Console:", isAWSConsole(tab.url));
-    }
+  chrome.tabs.onActivated.addListener((activeInfo) => {
+    console.log("[AWS Navigator] Tab Activated:", activeInfo);
+    checkAndNotifyTabUpdate();
   });
 
-  // Listen for messages from popup or content script
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    console.log("[AWS Navigator] Received Message:", {
-      message,
-      from: sender.url,
-    });
-    sendResponse({ received: true });
+  // Listen for URL changes in the current tab
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === "complete") {
+      console.log("[AWS Navigator] Tab Updated:", {
+        tabId,
+        url: tab.url,
+      });
+      checkAndNotifyTabUpdate();
+    }
   });
 });

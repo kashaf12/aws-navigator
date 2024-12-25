@@ -1,24 +1,26 @@
-import { ConversationListProps } from "./types";
 import classes from "./styles.module.css";
 import { formatDate } from "@/utils/utils";
 
-const ConversationList = ({
-  conversations,
-  activeConversationId,
-  onConversationSelect,
-  onNewChat,
-  onDelete,
-}: ConversationListProps) => {
+const ConversationList = () => {
+  const {
+    conversations,
+    activeConversationId,
+    updateActiveConversation,
+    deleteConversation,
+  } = useConversations();
   return (
     <div className={classes.container}>
-      <button onClick={onNewChat} className={classes.newChatButton}>
+      <button
+        onClick={() => updateActiveConversation(null)}
+        className={classes.newChatButton}
+      >
         New Chat
       </button>
       <div className={classes.list}>
         {conversations.map((conversation) => (
           <div key={conversation.id} className={classes.conversationWrapper}>
             <button
-              onClick={() => onConversationSelect(conversation.id)}
+              onClick={() => updateActiveConversation(conversation.id)}
               className={`${classes.conversationItem} ${
                 conversation.id === activeConversationId ? classes.active : ""
               }`}
@@ -33,7 +35,7 @@ const ConversationList = ({
               </div>
             </button>
             <button
-              onClick={() => onDelete(conversation.id)}
+              onClick={() => deleteConversation(conversation.id)}
               className={classes.deleteButton}
               aria-label="Delete conversation"
             >
