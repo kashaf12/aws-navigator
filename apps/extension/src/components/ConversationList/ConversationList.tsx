@@ -8,6 +8,7 @@ const ConversationList = ({
   onConversationSelect,
   onNewChat,
   onDelete,
+  syncing = false,
 }: ConversationListProps) => {
   const formatDate = useCallback((date: Date) => {
     const now = new Date();
@@ -33,8 +34,12 @@ const ConversationList = ({
 
   return (
     <div className={classes.container}>
-      <button onClick={onNewChat} className={classes.newChatButton}>
-        + New Chat
+      <button
+        onClick={onNewChat}
+        className={classes.newChatButton}
+        disabled={syncing}
+      >
+        {syncing ? "Syncing..." : " New Chat"}
       </button>
 
       <div className={classes.list}>

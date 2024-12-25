@@ -1,33 +1,32 @@
-import { useState } from "react";
-import { ConversationStore } from "@/types/chat";
-import {
-  getInitialStore,
-  createNewConversation,
-  addConversation,
-  deleteConversation,
-} from "@/utils/conversation-storage";
 import ChatContainer from "../ChatContainer";
+import ConversationEmptyState from "../ConversationEmptyState";
 import ConversationList from "../ConversationList";
 import classes from "./styles.module.css";
-
-const INITIAL_MESSAGE =
-  "Hello! I'm your AWS Navigator assistant. How can I help you today?";
+import { useConversations } from "@/hooks";
 
 const ChatDashboard = () => {
-  const [conversationStore, setConversationStore] =
-    useState<ConversationStore>(getInitialStore());
+  const {
+    conversations,
+    addOrUpdateConversation,
+    deleteConversation,
+    activeConversationId,
+    updateActiveConversation,
+  } = useConversations();
 
-  const handleNewChat = () => {
-    const newConversation = createNewConversation(INITIAL_MESSAGE);
-    const updatedStore = addConversation(conversationStore, newConversation);
-    setConversationStore(updatedStore);
-  };
+  const [syncing, setSyncing] = useState(false);
 
-  const handleConversationSelect = (conversationId: string) => {
-    setConversationStore((prev) => ({
-      ...prev,
-      activeConversationId: conversationId,
-    }));
+  const handleAddConversation = async () => {
+    setSyncing(true);
+    const newConversation = {
+      id: crypto.randomUUID(),
+      name: "New Conversation",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      messages: [],
+    };
+    await addOrUpdateConversation(newConversation);
+    await updateActiveConversation(newConversation.id);
+    setSyncing(false);
   };
 
   const handleHighlight = (selectors: string[]) => {
@@ -40,39 +39,31 @@ const ChatDashboard = () => {
     });
   };
 
-  const handleDeleteConversation = (conversationId: string) => {
-    const updatedStore = deleteConversation(conversationStore, conversationId);
-    setConversationStore(updatedStore);
-  };
-
-  const activeConversation = conversationStore.conversations.find(
-    (conv) => conv.id === conversationStore.activeConversationId
+  const activeConversation = conversations.find(
+    (conv) => conv.id === activeConversationId
   );
 
   return (
     <>
       <ConversationList
-        conversations={conversationStore.conversations}
-        activeConversationId={conversationStore.activeConversationId}
-        onConversationSelect={handleConversationSelect}
-        onNewChat={handleNewChat}
-        onDelete={handleDeleteConversation}
+        conversations={conversations}
+        activeConversationId={activeConversationId}
+        onConversationSelect={updateActiveConversation}
+        onNewChat={handleAddConversation}
+        onDelete={deleteConversation}
+        syncing={syncing}
       />
       <div className={classes.contentArea}>
-        {activeConversation && (
+        {activeConversation ? (
           <ChatContainer
             conversation={activeConversation}
             onHighlight={handleHighlight}
-            onUpdate={(updatedConversation) => {
-              setConversationStore((prev) => ({
-                ...prev,
-                conversations: prev.conversations.map((conv) =>
-                  conv.id === updatedConversation.id
-                    ? updatedConversation
-                    : conv
-                ),
-              }));
-            }}
+            onUpdate={addOrUpdateConversation}
+          />
+        ) : (
+          <ConversationEmptyState
+            onNewChat={handleAddConversation}
+            isConversationListEmpty={conversations.length === 0}
           />
         )}
       </div>

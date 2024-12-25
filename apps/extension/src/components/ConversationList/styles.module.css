@@ -23,6 +23,10 @@
     background-color: #1d4ed8;
 }
 
+.newChatButton:disabled {
+    background-color: #d1d5db;
+}
+
 .list {
     flex: 1;
     overflow-y: auto;
