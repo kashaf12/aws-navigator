@@ -1,7 +1,7 @@
 export enum ViewType {
   CurrentChat = "current-chat",
   History = "history",
-  TaskContainer = "TaskContainer",
+  Task = "TaskContainer",
   Settings = "settings",
   Documentation = "documentation",
   UserProfile = "user-profile",

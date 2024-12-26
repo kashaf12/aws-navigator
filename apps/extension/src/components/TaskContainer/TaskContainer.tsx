@@ -1,19 +1,12 @@
-import {
-  CheckCircle,
-  Circle,
-  MessageSquare,
-  SquarePlay,
-  XCircle,
-} from "lucide-react";
+import { CheckCircle, Circle, SquarePlay, XCircle } from "lucide-react";
 import classes from "./styles.module.css";
 import { TaskStatus, ViewType } from "@/contexts";
-import Tooltip from "../Tooltip";
-import { PositionType } from "../Navigation";
 import { useTask, useView, useChats } from "@/hooks";
 import EmptyContainer from "../EmptyContainer";
+import TaskDetails from "../TaskDetails";
 
 const TaskContainer = () => {
-  const { currentTask } = useTask();
+  const { currentTask, resetTask } = useTask();
   const { setActiveView } = useView();
   const { chats, updateActiveChat } = useChats();
 
@@ -52,48 +45,25 @@ const TaskContainer = () => {
   };
   return (
     <div className={classes.progressContainer}>
-      <div className={classes.header}>
-        <div className={classes.taskHeader}>
-          <h3 className={classes.taskTitle}>Current Task</h3>
-          {status === TaskStatus.IN_PROGRESS && (
-            <span className={classes.stepCount}>
-              Step {currentStepIndex + 1} of {steps.length}
-            </span>
-          )}
-        </div>
-        {isChatAvailable && (
-          <Tooltip
-            content="Return to Chat"
-            position={PositionType.Left}
-            delay={300}
-          >
-            <button
-              onClick={handleReturnToChat}
-              className={classes.returnToChat}
-            >
-              <MessageSquare size={20} />
-            </button>
-          </Tooltip>
-        )}
-      </div>
+      <TaskDetails
+        task={currentTask}
+        onReset={resetTask}
+        onReturnToChat={handleReturnToChat}
+        isChatAvailable={isChatAvailable}
+      />
 
       <div className={classes.stepsProgress}>
         {steps.map((step, index) => (
-          <Tooltip
-            key={index}
-            content={step.description}
-            position={PositionType.Right}
-            delay={300}
+          <div
+            className={`${classes.stepIndicator} ${
+              index === currentStepIndex ? classes.active : ""
+            }`}
+            key={step.step_number}
           >
-            <div
-              className={`${classes.stepIndicator} ${
-                index === currentStepIndex ? classes.active : ""
-              }`}
-            >
-              {getStepIcon(index)}
-              <div className={classes.stepLine} />
-            </div>
-          </Tooltip>
+            {getStepIcon(index)}
+            {step.description}
+            <div className={classes.stepLine} />
+          </div>
         ))}
       </div>
 

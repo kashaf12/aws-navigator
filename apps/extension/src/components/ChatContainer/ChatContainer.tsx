@@ -4,13 +4,14 @@ import TypingIndicator from "../TypingIndicator";
 import classes from "./styles.module.css";
 import ChatInput from "../ChatInput";
 import ChatEmptyState from "../ChatEmptyState";
-import { useAutoScroll, useTask } from "@/hooks";
+import { useAutoScroll, useTask, useView } from "@/hooks";
 import { ChatStatus } from "@/types";
+import { ViewType } from "@/contexts";
 
 const ChatContainer = () => {
   const { sendMessage, activeChat } = useChats();
   const { startTask } = useTask();
-
+  const { setActiveView } = useView();
   const messagesEndRef = useAutoScroll([activeChat?.updatedAt]);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -26,12 +27,13 @@ const ChatContainer = () => {
             <ChatMessage
               key={message.id}
               message={message}
-              onStartTask={(task) =>
+              onStartTask={(task) => {
                 startTask(task, {
                   chatId: activeChat.id,
                   messageId: message.id,
-                })
-              }
+                });
+                setActiveView(ViewType.Task);
+              }}
             />
           ))}
           {activeChat?.status === ChatStatus.PENDING && <TypingIndicator />}

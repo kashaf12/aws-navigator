@@ -29,7 +29,7 @@ export const navigationItems = [
     showInNav: true,
   },
   {
-    id: ViewType.TaskContainer,
+    id: ViewType.Task,
     label: "Task",
     Icon: SquarePlay,
     position: PositionType.Top,

@@ -15,6 +15,21 @@
     transition: all 0.2s;
 }
 
+.resetTask {
+    background: none;
+    border: none;
+    color: #dc2626;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    transition: all 0.2s;
+}
+
+.resetTask:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
 .returnToChat:hover {
     background-color: #f3f4f6;
     color: #374151;
@@ -24,6 +39,7 @@
 .progressContainer {
     padding: 1rem;
     border-top: 1px solid #e5e7eb;
+    width: 100%;
 }
 
 .taskHeader {
@@ -54,6 +70,7 @@
     align-items: center;
     padding: 0.25rem 0;
     cursor: pointer;
+    gap: 0.5rem;
 }
 
 .stepIndicator.active {
@@ -62,12 +79,12 @@
 
 .stepLine {
     position: absolute;
-    left: 10px;
+    left: 9px;
     top: 100%;
     bottom: 0;
     width: 2px;
     background-color: #e5e7eb;
-    height: 24px;
+    height: 10px;
 }
 
 .stepIndicator:last-child .stepLine {

@@ -13,7 +13,7 @@ import ProfileContainer from "../ProfileContainer";
 const ViewMapping: Record<ViewType, FC> = {
   [ViewType.CurrentChat]: ChatContainer,
   [ViewType.History]: ChatHistory,
-  [ViewType.TaskContainer]: TaskContainer,
+  [ViewType.Task]: TaskContainer,
   [ViewType.Settings]: SettingsContainer,
   [ViewType.Documentation]: DocumentationContainer,
   [ViewType.UserProfile]: ProfileContainer,
