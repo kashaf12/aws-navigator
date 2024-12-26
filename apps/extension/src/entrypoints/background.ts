@@ -5,7 +5,12 @@ export default defineBackground(() => {
 
   browser.sidePanel
     .setPanelBehavior({ openPanelOnActionClick: true })
-    .catch((error: unknown) => console.error(error));
+    .catch((error: unknown) =>
+      console.error(
+        "[AWS Navigator] error from side panel backgroundjs:",
+        error
+      )
+    );
 
   // Function to check if tab is AWS and notify sidepanel
   const checkAndNotifyTabUpdate = async () => {

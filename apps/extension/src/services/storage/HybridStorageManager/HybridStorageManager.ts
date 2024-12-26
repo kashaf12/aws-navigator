@@ -26,7 +26,7 @@ class HybridStorageManager implements StorageManager {
     try {
       await this.backendManager.addOrUpdateChat(chat);
     } catch (error) {
-      console.error("Failed to sync chat with backend", error);
+      console.error("[AWS Navigator] Failed to sync chat with backend", error);
     }
   }
 
@@ -35,7 +35,10 @@ class HybridStorageManager implements StorageManager {
     try {
       await this.backendManager.deleteChat(chatId);
     } catch (error) {
-      console.error("Failed to delete chat from backend", error);
+      console.error(
+        "[AWS Navigator] Failed to delete chat from backend",
+        error
+      );
     }
   }
 
@@ -54,7 +57,10 @@ class HybridStorageManager implements StorageManager {
     try {
       await this.backendManager.setActiveChatId(chatId);
     } catch (error) {
-      console.error("Failed to sync active chat ID with backend", error);
+      console.error(
+        "[AWS Navigator] Failed to sync active chat ID with backend",
+        error
+      );
     }
   }
 }

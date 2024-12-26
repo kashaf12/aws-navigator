@@ -102,7 +102,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
         updatedAt: new Date(),
       });
     } catch (error) {
-      console.error("Error getting response:", error);
+      console.error("[AWS Navigator] Error getting response:", error);
 
       const errorMessage: Message = {
         id: updatedMessages.length + 1,
