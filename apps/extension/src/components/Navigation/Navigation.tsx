@@ -10,41 +10,42 @@ import {
 import Tooltip from "../Tooltip";
 import { ViewType } from "@/contexts";
 import { useConversations, useView } from "@/hooks";
+import { PositionType } from "./types";
 
 export const navigationItems = [
   {
     id: ViewType.CurrentChat,
     label: "Current Chat",
     Icon: MessageCircle,
-    position: "top",
+    position: PositionType.Top,
     showInNav: true,
   },
   {
     id: ViewType.History,
     label: "History",
     Icon: History,
-    position: "top",
+    position: PositionType.Top,
     showInNav: true,
   },
   {
     id: ViewType.Settings,
     label: "Settings",
     Icon: Settings,
-    position: "top",
+    position: PositionType.Top,
     showInNav: true,
   },
   {
     id: ViewType.Documentation,
     label: "Documentation",
     Icon: FileText,
-    position: "top",
+    position: PositionType.Top,
     showInNav: true,
   },
   {
     id: ViewType.UserProfile,
     label: "Profile",
     Icon: User,
-    position: "bottom",
+    position: PositionType.Bottom,
     showInNav: true,
   },
 ];
@@ -53,15 +54,17 @@ const Navigation = () => {
   const { activeView, setActiveView } = useView();
   const { updateActiveConversation } = useConversations();
 
-  const topItems = navigationItems.filter((item) => item.position === "top");
+  const topItems = navigationItems.filter(
+    (item) => item.position === PositionType.Top
+  );
   const bottomItems = navigationItems.filter(
-    (item) => item.position === "bottom"
+    (item) => item.position === PositionType.Bottom
   );
 
   return (
     <nav className={classes.navigation}>
       <div className={classes.topItems}>
-        <Tooltip content={"New Chat"} position="right" delay={300}>
+        <Tooltip content="New Chat" position={PositionType.Right} delay={300}>
           <button
             onClick={() => {
               updateActiveConversation(null);
@@ -74,7 +77,12 @@ const Navigation = () => {
           </button>
         </Tooltip>
         {topItems.map(({ id, Icon, label }) => (
-          <Tooltip key={id} content={label} position="right" delay={300}>
+          <Tooltip
+            key={id}
+            content={label}
+            position={PositionType.Right}
+            delay={300}
+          >
             <button
               key={id}
               onClick={() => setActiveView(id)}
@@ -90,7 +98,12 @@ const Navigation = () => {
       </div>
       <div className={classes.bottomItems}>
         {bottomItems.map(({ id, label, Icon }) => (
-          <Tooltip key={id} content={label} position="right" delay={300}>
+          <Tooltip
+            key={id}
+            content={label}
+            position={PositionType.Right}
+            delay={300}
+          >
             <button
               onClick={() => setActiveView(id)}
               className={`${classes.navButton} ${
