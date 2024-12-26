@@ -106,3 +106,31 @@
     padding: 16px;
     text-align: center;
 }
+
+.chatNameRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pendingIndicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #2563eb;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

@@ -8,18 +8,15 @@ import { Task } from "@aws-navigator/schemas";
 import ChatEmptyState from "../ChatEmptyState";
 import { extractUniqueSelectors } from "@/utils/utils";
 import { useAutoScroll } from "@/hooks";
-import { MessageStatus } from "@/types";
-import { RotateCcw } from "lucide-react";
+import { ChatStatus } from "@/types";
 
 const ChatContainer = ({
   chat,
   className = "",
   onHighlight,
   onSend,
-  onRetry,
-  assistantState,
 }: ChatContainerProps) => {
-  const messagesEndRef = useAutoScroll([chat?.messages, assistantState]);
+  const messagesEndRef = useAutoScroll([chat?.updatedAt]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -44,22 +41,7 @@ const ChatContainer = ({
               onStartTask={handleHighlight}
             />
           ))}
-          {assistantState.status === MessageStatus.PENDING && (
-            <TypingIndicator />
-          )}
-          {assistantState.status === MessageStatus.ERROR && (
-            <div className={classes.errorContainer}>
-              <ErrorMessage
-                message={
-                  assistantState.error?.message || "Something went wrong"
-                }
-              />
-              <button onClick={onRetry} className={classes.retryButton}>
-                <RotateCcw size={20} />
-                Retry
-              </button>
-            </div>
-          )}
+          {chat?.status === ChatStatus.PENDING && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>
       ) : (
@@ -67,7 +49,7 @@ const ChatContainer = ({
       )}
       <ChatInput
         onSendMessage={onSend}
-        disabled={assistantState.status === MessageStatus.PENDING}
+        disabled={chat?.status === ChatStatus.PENDING}
         ref={inputRef}
       />
     </div>

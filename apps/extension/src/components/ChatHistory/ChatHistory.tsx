@@ -2,6 +2,7 @@ import { ViewType } from "@/contexts";
 import classes from "./styles.module.css";
 import { formatDate } from "@/utils/utils";
 import { useChats, useView } from "@/hooks";
+import { ChatStatus } from "@/types";
 
 const ChatHistory = () => {
   const { setActiveView } = useView();
@@ -22,19 +23,26 @@ const ChatHistory = () => {
                 }`}
               >
                 <div className={classes.chatInfo}>
-                  <span className={classes.chatName}>{chat.name}</span>
+                  <div className={classes.chatNameRow}>
+                    <span className={classes.chatName}>{chat.name}</span>
+                    {chat.status === ChatStatus.PENDING && (
+                      <span className={classes.pendingIndicator} />
+                    )}
+                  </div>
                   <span className={classes.timestamp}>
                     {formatDate(chat.updatedAt)}
                   </span>
                 </div>
               </button>
-              <button
-                onClick={() => deleteChat(chat.id)}
-                className={classes.deleteButton}
-                aria-label="Delete chat"
-              >
-                ×
-              </button>
+              {chat.status !== ChatStatus.PENDING && (
+                <button
+                  onClick={() => deleteChat(chat.id)}
+                  className={classes.deleteButton}
+                  aria-label="Delete chat"
+                >
+                  ×
+                </button>
+              )}
             </div>
           ))}
         </div>

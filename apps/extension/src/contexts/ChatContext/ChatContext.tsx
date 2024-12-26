@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { AssistantState, Chat, Message, MessageStatus } from "@/types";
+import { Chat, ChatStatus, Message, MessageType } from "@/types";
 import { LocalStorageManager, MockChat } from "@/services";
 import { ChatContextType, ChatProviderProps } from "./types";
 import { sortChats, generateChatName } from "@/utils/chats";
@@ -13,9 +13,6 @@ const chatService = new MockChat();
 export const ChatProvider = ({ children }: ChatProviderProps) => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [activeChatId, setActiveChatId] = useState<string | null>(null);
-  const [assistantState, setAssistantState] = useState<AssistantState>({
-    status: MessageStatus.IDLE,
-  });
 
   useEffect(() => {
     const loadChats = async () => {
@@ -51,6 +48,11 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
 
   const activeChat = chats.find((conv) => conv.id === activeChatId);
 
+  const handleOnAddUpdateChat = async (chat: Chat) => {
+    await addOrUpdateChat(chat);
+    await updateActiveChat(chat.id);
+  };
+
   const sendMessage = async (content: string) => {
     if (!content.trim()) return;
 
@@ -60,72 +62,88 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
       createdAt: new Date(),
       updatedAt: new Date(),
       messages: [],
+      status: ChatStatus.IDLE,
     };
+
+    if (currentChat.status === ChatStatus.PENDING) return;
 
     const userMessage: Message = {
       id: currentChat?.messages?.length + 1,
-      type: "user",
+      type: MessageType.USER,
       content,
       timestamp: new Date(),
     };
 
     const updatedMessages = [...(currentChat?.messages || []), userMessage];
-    await addOrUpdateChat({
+
+    await handleOnAddUpdateChat({
       ...currentChat,
       messages: updatedMessages,
+      status: ChatStatus.PENDING,
       updatedAt: new Date(),
     });
-
-    setAssistantState({ status: MessageStatus.PENDING });
 
     try {
       const response = await chatService.sendMessage(content);
 
-      if (!response.success) {
-        setAssistantState({
-          status: MessageStatus.ERROR,
-          error: response.error,
-        });
-        return;
-      }
-
       const assistantMessage: Message = {
-        id: currentChat.messages.length + 2,
-        type: "assistant",
+        id: updatedMessages.length + 1,
+        type: MessageType.ASSISTANT,
         content: response?.content || "No response content",
         timestamp: new Date(),
         tasks: response.tasks,
+        error: response.error,
       };
 
-      await addOrUpdateChat({
+      await handleOnAddUpdateChat({
         ...currentChat,
         messages: [...updatedMessages, assistantMessage],
+        status: ChatStatus.IDLE,
         updatedAt: new Date(),
       });
-
-      setAssistantState({ status: MessageStatus.IDLE });
     } catch (error) {
       console.error("Error getting response:", error);
-      setAssistantState({
-        status: MessageStatus.ERROR,
+
+      const errorMessage: Message = {
+        id: updatedMessages.length + 1,
+        type: MessageType.ASSISTANT,
+        content: "An error occurred while processing your request.",
+        timestamp: new Date(),
         error: {
           message: "Failed to get response. Please try again.",
           code: "CHAT_ERROR",
         },
+      };
+
+      await handleOnAddUpdateChat({
+        ...currentChat,
+        messages: [...updatedMessages, errorMessage],
+        status: ChatStatus.IDLE,
+        updatedAt: new Date(),
       });
     }
   };
 
-  const retryLastMessage = async () => {
-    if (!activeChat?.messages.length) return;
+  const retryMessage = async (messageId: number) => {
+    if (!activeChat || activeChat.status === ChatStatus.PENDING) return;
 
-    const lastUserMessage = [...activeChat.messages]
-      .reverse()
-      .find((msg) => msg.type === "user");
+    const messageIndex = activeChat.messages.findIndex(
+      (m) => m.id === messageId
+    );
+    if (messageIndex <= 0) return;
 
-    if (lastUserMessage) {
-      await sendMessage(lastUserMessage.content);
-    }
+    const userMessage = activeChat.messages[messageIndex - 1];
+    if (userMessage.type !== "user") return;
+
+    const messages = activeChat.messages.filter((m) => m.id !== messageId);
+
+    await addOrUpdateChat({
+      ...activeChat,
+      messages,
+      updatedAt: new Date(),
+    });
+
+    await sendMessage(userMessage.content);
   };
 
   return (
@@ -134,9 +152,8 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
         chats,
         activeChatId,
         activeChat,
-        assistantState,
         sendMessage,
-        retryLastMessage,
+        retryMessage,
         addOrUpdateChat,
         deleteChat,
         updateActiveChat,

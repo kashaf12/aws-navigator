@@ -3,8 +3,7 @@ import classes from "./styles.module.css";
 import { useChats } from "@/hooks";
 
 const ChatDashboard = () => {
-  const { sendMessage, activeChat, retryLastMessage, assistantState } =
-    useChats();
+  const { sendMessage, activeChat } = useChats();
 
   const handleHighlight = (selectors: string[]) => {
     // Implement your highlighting logic here
@@ -23,8 +22,6 @@ const ChatDashboard = () => {
           chat={activeChat}
           onHighlight={handleHighlight}
           onSend={sendMessage}
-          onRetry={retryLastMessage}
-          assistantState={assistantState}
         />
       </div>
     </>
