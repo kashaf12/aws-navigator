@@ -26,7 +26,12 @@ const ChatContainer = () => {
             <ChatMessage
               key={message.id}
               message={message}
-              onStartTask={startTask}
+              onStartTask={(task) =>
+                startTask(task, {
+                  chatId: activeChat.id,
+                  messageId: message.id,
+                })
+              }
             />
           ))}
           {activeChat?.status === ChatStatus.PENDING && <TypingIndicator />}

@@ -1,0 +1,44 @@
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    height: 100%;
+    text-align: center;
+}
+
+.emptyStateIcon {
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.emptyStateTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.emptyStateDescription {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+    max-width: 24rem;
+    line-height: 1.5;
+}
+
+.emptyStateButton {
+    padding: 0.75rem 1.5rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.emptyStateButton:hover {
+    background-color: #1d4ed8;
+}

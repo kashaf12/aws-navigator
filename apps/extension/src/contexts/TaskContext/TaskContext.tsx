@@ -5,7 +5,8 @@ import {
   TaskContextType,
   TaskProviderProps,
   TaskStatus,
-  TaskWithStatus,
+  ActiveTask,
+  ChatReference,
 } from "./types";
 
 export const TaskContext = createContext<TaskContextType | undefined>(
@@ -13,15 +14,16 @@ export const TaskContext = createContext<TaskContextType | undefined>(
 );
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
-  const [currentTask, setCurrentTask] = useState<TaskWithStatus | null>(null);
+  const [currentTask, setCurrentTask] = useState<ActiveTask | null>(null);
 
-  const startTask = (task: Task) => {
-    const taskWithStatus: TaskWithStatus = {
+  const startTask = (task: Task, chatRef: ChatReference) => {
+    const activeTask: ActiveTask = {
       ...task,
       status: TaskStatus.IN_PROGRESS,
       currentStepIndex: 0,
+      chatReference: chatRef,
     };
-    setCurrentTask(taskWithStatus);
+    setCurrentTask(activeTask);
 
     if (task.steps.length > 0) {
       const selectors = extractUniqueSelectors(task);
@@ -29,7 +31,7 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     }
 
     // Save to local storage
-    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(taskWithStatus));
+    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(activeTask));
   };
 
   const completeStep = (stepIndex: number) => {

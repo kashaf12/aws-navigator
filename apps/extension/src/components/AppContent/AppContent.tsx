@@ -5,13 +5,18 @@ import { useView } from "@/hooks";
 import ChatHistory from "../ChatHistory";
 import { FC } from "react";
 import ErrorMessage from "../ErrorMessage";
+import TaskContainer from "../TaskContainer";
+import SettingsContainer from "../SettingsContainer";
+import DocumentationContainer from "../DocumentationContainer";
+import ProfileContainer from "../ProfileContainer";
 
 const ViewMapping: Record<ViewType, FC> = {
   [ViewType.CurrentChat]: ChatContainer,
   [ViewType.History]: ChatHistory,
-  [ViewType.Settings]: () => <div>Settings</div>,
-  [ViewType.Documentation]: () => <div>Documentation</div>,
-  [ViewType.UserProfile]: () => <div>UserProfile</div>,
+  [ViewType.TaskContainer]: TaskContainer,
+  [ViewType.Settings]: SettingsContainer,
+  [ViewType.Documentation]: DocumentationContainer,
+  [ViewType.UserProfile]: ProfileContainer,
 };
 
 const AppContent = () => {

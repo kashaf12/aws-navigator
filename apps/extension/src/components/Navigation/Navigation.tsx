@@ -5,6 +5,7 @@ import {
   MessageCircle,
   Plus,
   Settings,
+  SquarePlay,
   User,
 } from "lucide-react";
 import Tooltip from "../Tooltip";
@@ -24,6 +25,13 @@ export const navigationItems = [
     id: ViewType.History,
     label: "History",
     Icon: History,
+    position: PositionType.Top,
+    showInNav: true,
+  },
+  {
+    id: ViewType.TaskContainer,
+    label: "Task",
+    Icon: SquarePlay,
     position: PositionType.Top,
     showInNav: true,
   },

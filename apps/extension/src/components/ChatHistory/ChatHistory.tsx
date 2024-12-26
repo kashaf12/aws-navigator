@@ -3,6 +3,8 @@ import classes from "./styles.module.css";
 import { formatDate } from "@/utils";
 import { useChats, useView } from "@/hooks";
 import { ChatStatus } from "@/types";
+import EmptyContainer from "../EmptyContainer";
+import { History } from "lucide-react";
 
 const ChatHistory = () => {
   const { setActiveView } = useView();
@@ -47,15 +49,13 @@ const ChatHistory = () => {
           ))}
         </div>
       ) : (
-        <div className={classes.emptyState}>
-          <i>No chats yet. Please create a chat to get started.</i>
-          <button
-            onClick={() => setActiveView(ViewType.CurrentChat)}
-            className={classes.newChatButton}
-          >
-            Start New Chat
-          </button>
-        </div>
+        <EmptyContainer
+          Icon={History}
+          title="No Chats Yet."
+          description="Please create a chat to get started."
+          buttonText="Start New Chat"
+          onClick={() => setActiveView(ViewType.CurrentChat)}
+        />
       )}
     </div>
   );

@@ -4,27 +4,6 @@
     width: 100%;
 }
 
-.newChatButton {
-    padding: 8px 16px;
-    margin: 16px;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.newChatButton:hover {
-    background-color: #1d4ed8;
-}
-
-.newChatButton:disabled {
-    background-color: #d1d5db;
-}
-
 .list {
     flex: 1;
     overflow-y: auto;
@@ -97,15 +76,6 @@
     color: #ef4444;
 }
 
-.emptyState {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 16px;
-    text-align: center;
-}
 
 .chatNameRow {
     display: flex;

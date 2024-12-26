@@ -1,6 +1,11 @@
 import { Task } from "@aws-navigator/schemas";
 import { ReactNode } from "react";
 
+export interface ChatReference {
+  chatId: string;
+  messageId: number;
+}
+
 export enum TaskStatus {
   IDLE = "idle",
   IN_PROGRESS = "in_progress",
@@ -8,14 +13,15 @@ export enum TaskStatus {
   FAILED = "failed",
 }
 
-export interface TaskWithStatus extends Task {
+export interface ActiveTask extends Task {
   status: TaskStatus;
   currentStepIndex: number;
+  chatReference: ChatReference;
 }
 
 export interface TaskContextType {
-  currentTask: TaskWithStatus | null;
-  startTask: (task: Task) => void;
+  currentTask: ActiveTask | null;
+  startTask: (task: Task, chatRef: ChatReference) => void;
   completeStep: (stepIndex: number) => void;
   resetTask: () => void;
   highlightElements: (selectors: string[]) => void;
