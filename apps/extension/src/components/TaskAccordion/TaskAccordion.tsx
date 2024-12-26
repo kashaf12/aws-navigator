@@ -1,6 +1,7 @@
 import { Task } from "@aws-navigator/schemas";
 import classes from "./styles.module.css";
 import Accordion from "../Accordion";
+import { SquarePlay } from "lucide-react";
 
 interface TaskAccordionProps {
   task: Task;
@@ -31,6 +32,7 @@ const TaskAccordion = ({ task, onStartTask }: TaskAccordionProps) => {
         </div>
       </Accordion>
       <button className={classes.startButton} onClick={() => onStartTask(task)}>
+        <SquarePlay size={20} />
         Start Task
       </button>
     </div>
