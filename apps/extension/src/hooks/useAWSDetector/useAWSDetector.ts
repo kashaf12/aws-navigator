@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { isAWSConsole } from "@/utils/aws-detection";
+import { isAWSConsole } from "@/utils";
 
 const useAWSDetector = () => {
   const [isAWS, setIsAWS] = useState<boolean>(false);

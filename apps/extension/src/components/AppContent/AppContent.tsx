@@ -1,5 +1,5 @@
 import classes from "./styles.module.css";
-import ChatDashboard from "../ChatDashboard";
+import ChatContainer from "../ChatContainer";
 import { ViewType } from "@/contexts";
 import { useView } from "@/hooks";
 import ChatHistory from "../ChatHistory";
@@ -7,7 +7,7 @@ import { FC } from "react";
 import ErrorMessage from "../ErrorMessage";
 
 const ViewMapping: Record<ViewType, FC> = {
-  [ViewType.CurrentChat]: ChatDashboard,
+  [ViewType.CurrentChat]: ChatContainer,
   [ViewType.History]: ChatHistory,
   [ViewType.Settings]: () => <div>Settings</div>,
   [ViewType.Documentation]: () => <div>Documentation</div>,

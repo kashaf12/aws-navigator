@@ -1,0 +1,50 @@
+.accordion {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+.trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: #374151;
+}
+
+.trigger:hover {
+    background-color: #f9fafb;
+}
+
+.triggerContent {
+    flex: 1;
+    margin-right: 0.5rem;
+}
+
+.chevron {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    color: #6b7280;
+}
+
+.rotate {
+    transform: rotate(180deg);
+}
+
+.content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.expanded {
+    max-height: 500px;
+    /* Adjust based on your needs */
+    transition: max-height 0.3s ease-in;
+}

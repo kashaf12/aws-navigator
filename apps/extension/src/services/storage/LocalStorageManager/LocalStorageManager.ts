@@ -1,6 +1,6 @@
 import { Chat } from "@/types";
 import { StorageManager } from "../types";
-import { CHATS_STORAGE_KEY, ACTIVE_CHAT_STORAGE_KEY } from "@/utils/constants";
+import { CHATS_STORAGE_KEY, ACTIVE_CHAT_STORAGE_KEY } from "@/utils";
 
 class LocalStorageManager implements StorageManager {
   private CHATS_KEY = CHATS_STORAGE_KEY;

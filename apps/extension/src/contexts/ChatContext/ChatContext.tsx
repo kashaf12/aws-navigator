@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import { Chat, ChatStatus, Message, MessageType } from "@/types";
 import { LocalStorageManager, MockChat } from "@/services";
 import { ChatContextType, ChatProviderProps } from "./types";
-import { sortChats, generateChatName } from "@/utils/chats";
+import { sortChats, generateChatName } from "@/utils";
 
 export const ChatContext = createContext<ChatContextType | undefined>(
   undefined

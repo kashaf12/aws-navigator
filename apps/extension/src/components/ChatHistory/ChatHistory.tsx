@@ -1,6 +1,6 @@
 import { ViewType } from "@/contexts";
 import classes from "./styles.module.css";
-import { formatDate } from "@/utils/utils";
+import { formatDate } from "@/utils";
 import { useChats, useView } from "@/hooks";
 import { ChatStatus } from "@/types";
 

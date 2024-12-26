@@ -2,54 +2,42 @@ import { useRef, useEffect } from "react";
 import ChatMessage from "../ChatMessage";
 import TypingIndicator from "../TypingIndicator";
 import classes from "./styles.module.css";
-import { ChatContainerProps } from "./types";
 import ChatInput from "../ChatInput";
-import { Task } from "@aws-navigator/schemas";
 import ChatEmptyState from "../ChatEmptyState";
-import { extractUniqueSelectors } from "@/utils/utils";
-import { useAutoScroll } from "@/hooks";
+import { useAutoScroll, useTask } from "@/hooks";
 import { ChatStatus } from "@/types";
 
-const ChatContainer = ({
-  chat,
-  className = "",
-  onHighlight,
-  onSend,
-}: ChatContainerProps) => {
-  const messagesEndRef = useAutoScroll([chat?.updatedAt]);
+const ChatContainer = () => {
+  const { sendMessage, activeChat } = useChats();
+  const { startTask } = useTask();
+
+  const messagesEndRef = useAutoScroll([activeChat?.updatedAt]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
-  }, [chat]);
-
-  const handleHighlight = (task: Task) => {
-    const uniqueSelectors = extractUniqueSelectors(task);
-    if (uniqueSelectors.length > 0 && onHighlight) {
-      onHighlight(uniqueSelectors);
-    }
-  };
+  }, [activeChat]);
 
   return (
-    <div className={`${classes.chatContainer} ${className}`}>
-      {chat ? (
+    <div className={classes.chatContainer}>
+      {activeChat ? (
         <div className={classes.messagesContainer}>
-          {chat?.messages.map((message) => (
+          {activeChat?.messages.map((message) => (
             <ChatMessage
               key={message.id}
               message={message}
-              onStartTask={handleHighlight}
+              onStartTask={startTask}
             />
           ))}
-          {chat?.status === ChatStatus.PENDING && <TypingIndicator />}
+          {activeChat?.status === ChatStatus.PENDING && <TypingIndicator />}
           <div ref={messagesEndRef} />
         </div>
       ) : (
         <ChatEmptyState />
       )}
       <ChatInput
-        onSendMessage={onSend}
-        disabled={chat?.status === ChatStatus.PENDING}
+        onSendMessage={sendMessage}
+        disabled={activeChat?.status === ChatStatus.PENDING}
         ref={inputRef}
       />
     </div>
