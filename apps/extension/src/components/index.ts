@@ -1,7 +1,7 @@
 export { default as ChatContainer } from "./ChatContainer";
 export { default as ChatInput } from "./ChatInput";
 export { default as ChatMessage } from "./ChatMessage";
-export { default as ConversationList } from "./ConversationList";
+export { default as ChatHistory } from "./ChatHistory";
 export { default as ErrorMessage } from "./ErrorMessage";
 export { default as MarkdownContent } from "./MarkdownContent";
 export { default as NotAWSWarning } from "./NotAWSWarning";

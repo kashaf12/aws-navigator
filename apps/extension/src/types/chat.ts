@@ -1,5 +1,11 @@
 import { Task } from "@aws-navigator/schemas";
 
+export enum MessageStatus {
+  IDLE = "idle",
+  PENDING = "pending",
+  ERROR = "error",
+}
+
 export interface Step {
   id: string;
   description: string;
@@ -12,11 +18,20 @@ export interface StepsResponse {
   message: string;
 }
 
-export interface ConversationResponse {
-  type: "conversation";
+export interface ChatResponse {
+  type: "chat";
   message: string;
 }
 
+export interface MessageError {
+  message: string;
+  code?: string;
+}
+
+export interface AssistantState {
+  status: MessageStatus;
+  error?: MessageError;
+}
 export interface Message {
   id: number;
   type: MessageType;
@@ -36,11 +51,13 @@ export interface Message {
 }
 
 export interface BackendResponse {
-  content: string; // Markdown content with references
+  success: boolean;
+  error?: MessageError;
+  content?: string; // Markdown content with references
   tasks?: Task[]; // Optional tasks array
 }
 
-export interface Conversation {
+export interface Chat {
   id: string;
   name: string;
   createdAt: Date;
@@ -48,7 +65,7 @@ export interface Conversation {
   messages: Message[];
 }
 
-export interface ConversationStore {
-  conversations: Conversation[];
-  activeConversationId: string | null;
+export interface ChatStore {
+  chats: Chat[];
+  activeChatId: string | null;
 }

@@ -1,7 +1,7 @@
-import { Conversation } from "@/types/chat";
+import { Chat } from "@/types";
 
-export const sortConversations = (convs: Conversation[]): Conversation[] => {
-  return convs.sort((a, b) => {
+export const sortChats = (chats: Chat[]): Chat[] => {
+  return chats.sort((a, b) => {
     const updatedAtComparison =
       new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
     if (updatedAtComparison !== 0) {
@@ -9,4 +9,9 @@ export const sortConversations = (convs: Conversation[]): Conversation[] => {
     }
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // Then by createdAt
   });
+};
+
+export const generateChatName = (firstMessage: string): string => {
+  const name = firstMessage.slice(0, 30);
+  return name.length < firstMessage.length ? `${name}...` : name;
 };

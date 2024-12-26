@@ -1,5 +1,5 @@
 export * from "./useAWSDetector";
-export * from "./useConversations";
+export * from "./useChats";
 export * from "./useAutoScroll";
 export * from "./useView";
-export * from "./useConversations";
+export * from "./useChats";

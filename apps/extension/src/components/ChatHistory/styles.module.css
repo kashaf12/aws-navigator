@@ -31,7 +31,7 @@
     padding: 8px;
 }
 
-.conversationItem {
+.chatItem {
     width: 100%;
     padding: 12px;
     background: none;
@@ -42,21 +42,21 @@
     transition: background-color 0.2s;
 }
 
-.conversationItem:hover {
+.chatItem:hover {
     background-color: #f3f4f6;
 }
 
-.conversationItem.active {
+.chatItem.active {
     background-color: #e5e7eb;
 }
 
-.conversationInfo {
+.chatInfo {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.conversationName {
+.chatName {
     font-size: 14px;
     font-weight: 500;
     color: #111827;
@@ -70,7 +70,7 @@
     color: #6b7280;
 }
 
-.conversationWrapper {
+.chatWrapper {
     position: relative;
     display: flex;
     align-items: center;
@@ -89,7 +89,7 @@
     z-index: 1;
 }
 
-.conversationWrapper:hover .deleteButton {
+.chatWrapper:hover .deleteButton {
     display: block;
 }
 

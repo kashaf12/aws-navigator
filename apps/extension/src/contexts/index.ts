@@ -1,2 +1,2 @@
 export * from "./ViewContext";
-export * from "./ConversationContext";
+export * from "./ChatContext";

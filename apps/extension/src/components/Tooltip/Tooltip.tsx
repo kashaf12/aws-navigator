@@ -2,11 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import classes from "./styles.module.css";
 import { TooltipProps } from "./types";
+import { PositionType } from "../Navigation";
 
 const Tooltip = ({
   children,
   content,
-  position = "right",
+  position = PositionType.Right,
   delay = 200,
 }: TooltipProps) => {
   const [isVisible, setIsVisible] = useState(false);

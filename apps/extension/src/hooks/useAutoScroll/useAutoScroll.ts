@@ -1,9 +1,9 @@
-const useAutoScroll = (dependency: unknown) => {
+const useAutoScroll = (dependency: unknown[]) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
-  }, [dependency]);
+  }, dependency);
 
   return ref;
 };

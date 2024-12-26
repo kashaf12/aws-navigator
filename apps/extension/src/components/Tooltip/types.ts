@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
-
-export type Position = "top" | "right" | "bottom" | "left";
+import { PositionType } from "../Navigation";
 
 export interface TooltipProps {
   children: ReactNode;
   content: ReactNode;
-  position?: Position;
+  position?: PositionType;
   delay?: number;
 }

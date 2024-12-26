@@ -1,9 +1,10 @@
-import { Conversation } from "@/types/chat";
+import { AssistantState, Chat } from "@/types/chat";
 
 export interface ChatContainerProps {
-  conversation?: Conversation;
+  chat?: Chat;
   className?: string;
   onHighlight?: (selectors: string[]) => void;
   onSend: (message: string) => void;
-  isTyping?: boolean;
+  onRetry?: () => void;
+  assistantState: AssistantState;
 }

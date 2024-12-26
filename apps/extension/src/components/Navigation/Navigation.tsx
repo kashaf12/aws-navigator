@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Tooltip from "../Tooltip";
 import { ViewType } from "@/contexts";
-import { useConversations, useView } from "@/hooks";
+import { useChats, useView } from "@/hooks";
 import { PositionType } from "./types";
 
 export const navigationItems = [
@@ -52,7 +52,7 @@ export const navigationItems = [
 
 const Navigation = () => {
   const { activeView, setActiveView } = useView();
-  const { updateActiveConversation } = useConversations();
+  const { updateActiveChat } = useChats();
 
   const topItems = navigationItems.filter(
     (item) => item.position === PositionType.Top
@@ -67,7 +67,7 @@ const Navigation = () => {
         <Tooltip content="New Chat" position={PositionType.Right} delay={300}>
           <button
             onClick={() => {
-              updateActiveConversation(null);
+              updateActiveChat(null);
               setActiveView(ViewType.CurrentChat);
             }}
             className={`${classes.navButton} ${classes.accentButton}`}

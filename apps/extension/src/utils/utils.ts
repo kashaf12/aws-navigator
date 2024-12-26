@@ -22,11 +22,6 @@ export const formatDate = (date: Date) => {
   }
 };
 
-export const generateConversationName = (firstMessage: string): string => {
-  const name = firstMessage.slice(0, 30);
-  return name.length < firstMessage.length ? `${name}...` : name;
-};
-
 export const extractUniqueSelectors = (task: Task): string[] => {
   const selectors = task.steps.flatMap((step) =>
     step.ui_elements.map((element) => element.identifier.css_selector)

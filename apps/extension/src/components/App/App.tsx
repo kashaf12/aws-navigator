@@ -1,13 +1,13 @@
 import classes from "./styles.module.css";
 import AppContent from "../AppContent";
-import { ConversationProvider, ViewProvider } from "@/contexts";
+import { ChatProvider, ViewProvider } from "@/contexts";
 import Header from "../Header";
 import Navigation from "../Navigation";
 
 const App = () => {
   return (
     <div className={classes.container}>
-      <ConversationProvider>
+      <ChatProvider>
         <ViewProvider>
           <Header title="AWS Navigator" />
           <div className={classes.layout}>
@@ -17,7 +17,7 @@ const App = () => {
             </div>
           </div>
         </ViewProvider>
-      </ConversationProvider>
+      </ChatProvider>
     </div>
   );
 };
