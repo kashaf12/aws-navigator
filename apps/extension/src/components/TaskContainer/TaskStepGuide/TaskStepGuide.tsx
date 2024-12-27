@@ -7,7 +7,7 @@ import StepContent from "./StepContent";
 
 const TaskStepGuide = ({ task }: TaskStepGuideProps) => {
   const getStepIcon = (index: number) => {
-    if (index < task.currentStepIndex) {
+    if (task.status === TaskStatus.COMPLETED || index < task.currentStepIndex) {
       return <CheckCircle className={classes.completedIcon} size={20} />;
     } else if (index === task.currentStepIndex) {
       return <Circle className={classes.currentIcon} size={20} />;
@@ -32,7 +32,6 @@ const TaskStepGuide = ({ task }: TaskStepGuideProps) => {
           </div>
           <div className={classes.stepAccordion}>
             <Accordion
-              className=""
               trigger={
                 <div className={classes.stepHeader}>
                   <span className={classes.stepDescription}>
