@@ -55,9 +55,14 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     if (!isLastStep && currentTask.steps[stepIndex + 1]) {
       const nextStep = currentTask.steps[stepIndex + 1];
       const selectors = nextStep.ui_elements.map(
-        (element) => element.identifier.css_selector
+        (element) =>
+          element.identifier.css_selector ||
+          element.identifier.id ||
+          element.identifier.custom_attribute ||
+          element.identifier.text_content ||
+          element.identifier.xpath
       );
-      highlightElements(selectors);
+      highlightElements(selectors as string[]);
     }
   };
 
