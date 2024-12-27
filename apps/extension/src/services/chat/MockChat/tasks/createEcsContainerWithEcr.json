@@ -1,0 +1,301 @@
+{
+  "id": "create-ecs-container-with-ecr",
+  "task": "Create an ECS container with ECR",
+  "steps": [
+    {
+      "id": 1,
+      "description": "Open AWS Management Console",
+      "pre_conditions": {
+        "url": null
+      },
+      "post_conditions": {
+        "url": "https://aws.amazon.com/console/"
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Navigate to the AWS Management Console",
+          "actions": [
+            {
+              "id": 1,
+              "description": "Open a new browser tab",
+              "ui_interaction": {
+                "type": "browser",
+                "identifier": {
+                  "custom_attribute": "new_tab"
+                },
+                "action": "open"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter the AWS Management Console URL and press Enter",
+              "ui_interaction": {
+                "type": "browser",
+                "identifier": {
+                  "text_content": "https://aws.amazon.com/console/"
+                },
+                "action": "navigate"
+              }
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "priority": 2,
+          "description": "Navigate to the AWS Management Console",
+          "actions": [
+            {
+              "id": 1,
+              "description": "Open a new browser tab",
+              "ui_interaction": {
+                "type": "browser",
+                "identifier": {
+                  "custom_attribute": "new_tab"
+                },
+                "action": "open"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter the AWS Management Console URL and press Enter",
+              "ui_interaction": {
+                "type": "browser",
+                "identifier": {
+                  "text_content": "https://aws.amazon.com/console/"
+                },
+                "action": "navigate"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "description": "Log in to AWS Console",
+      "pre_conditions": {
+        "url": "https://aws.amazon.com/console/"
+      },
+      "post_conditions": {
+        "url": "https://console.aws.amazon.com/"
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Log in using user credentials",
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click on the Sign In button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Sign In"
+                },
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter email address",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "input#username"
+                },
+                "action": "type",
+                "manual_intervention": true
+              }
+            },
+            {
+              "id": 3,
+              "description": "Enter password",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "input#password"
+                },
+                "action": "type",
+                "manual_intervention": true
+              }
+            },
+            {
+              "id": 4,
+              "description": "Click on the Sign In button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Sign In"
+                },
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "description": "Navigate to ECR Console",
+      "pre_conditions": {
+        "url": "https://console.aws.amazon.com/"
+      },
+      "post_conditions": {
+        "url": "https://console.aws.amazon.com/ecr/home"
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Use the Services menu to navigate to ECR",
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click on the Services menu",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Services"
+                },
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Type 'ECR' in the search bar",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "input#service-search"
+                },
+                "action": "type",
+                "manual_intervention": true
+              }
+            },
+            {
+              "id": 3,
+              "description": "Click on Elastic Container Registry (ECR) link",
+              "ui_interaction": {
+                "type": "link",
+                "identifier": {
+                  "text_content": "Elastic Container Registry"
+                },
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "description": "Create a new ECR Repository",
+      "pre_conditions": {
+        "url": "https://console.aws.amazon.com/ecr/home"
+      },
+      "post_conditions": {
+        "url": "https://console.aws.amazon.com/ecr/repository-created"
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Create a new repository",
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click on the Create Repository button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Create Repository"
+                },
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter repository name",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "input[name='repository-name']"
+                },
+                "action": "type",
+                "manual_intervention": true
+              }
+            },
+            {
+              "id": 3,
+              "description": "Click on the Create button to finish",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Create"
+                },
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "description": "Push Docker image to ECR",
+      "optional": true,
+      "pre_conditions": {
+        "url": "https://console.aws.amazon.com/ecr/repository-created"
+      },
+      "post_conditions": {
+        "url": "https://console.aws.amazon.com/ecr/repository-images"
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Upload Docker image using ECR Console",
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click on the Upload Image button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Upload Image"
+                },
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Select the image file from local system",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "input[type='file']"
+                },
+                "action": "type",
+                "manual_intervention": true
+              }
+            },
+            {
+              "id": 3,
+              "description": "Click on the Confirm Upload button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "text_content": "Confirm Upload"
+                },
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

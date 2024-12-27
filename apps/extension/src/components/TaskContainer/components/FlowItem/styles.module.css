@@ -1,9 +1,3 @@
-.flowSelector {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
 .flowItem {
     display: flex;
     align-items: flex-start;
@@ -44,13 +38,6 @@
     font-weight: 500;
     color: #111827;
     margin: 0 0 0.25rem;
-}
-
-.flowDescription {
-    font-size: 0.75rem;
-    color: #6b7280;
-    margin: 0 0 0.5rem;
-    line-height: 1.4;
 }
 
 .flowMetrics {
@@ -97,14 +84,4 @@
 
 .pendingIcon {
     color: #f59e0b;
-}
-
-.chevron {
-    color: #9ca3af;
-    transition: transform 0.2s ease;
-}
-
-.chevron.selected {
-    transform: rotate(90deg);
-    color: #2563eb;
 }

@@ -3,10 +3,12 @@ import { ChatService } from "../types";
 import { Task } from "@aws-navigator/schemas";
 import createS3Bucket from "./tasks/createS3Task.json";
 import deployServerlessWebapp from "./tasks/deployServerlessWebapp.json";
+import createEcsContainerWithEcr from "./tasks/createEcsContainerWithEcr.json";
 
 const EXAMPLE_TASKS: Record<string, Task> = {
   s3_bucket: createS3Bucket as Task,
   serverless: deployServerlessWebapp as Task,
+  createEcsContainerWithEcr: createEcsContainerWithEcr as Task,
 };
 
 class MockChat implements ChatService {
@@ -38,6 +40,19 @@ Source: AWS Documentation - [Creating a bucket](https://docs.aws.amazon.com/Amaz
         
 Source: AWS Documentation - [serverless](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)`,
         tasks: [EXAMPLE_TASKS.serverless],
+      };
+    }
+
+    if (
+      content.toLowerCase().includes("create ecs") ||
+      content.toLowerCase().includes("ecs")
+    ) {
+      return {
+        success: true,
+        content: `Here's how to create an ECS. I'll guide you through the process.
+        
+Source: AWS Documentation - [ecs](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)`,
+        tasks: [EXAMPLE_TASKS.createEcsContainerWithEcr],
       };
     }
 

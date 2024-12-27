@@ -43,18 +43,21 @@ const StepAccordion = ({
   const stepContent = (
     <div className={classes.stepContent}>
       <div className={classes.flowSelectorWrapper}>
-        <h4 className={classes.sectionTitle}>Available Flows</h4>
+        <h4 className={classes.sectionTitle}>
+          Available Flows
+          <span className={classes.flowCount}>{step.flows.length}</span>
+        </h4>
+
         <FlowSelector
           flows={step.flows}
           selectedFlowId={selectedFlow?.id}
           onFlowSelect={onFlowSelect}
-          isDisabled={!isActive}
         />
       </div>
-      {selectedFlow && isActive && (
+      {selectedFlow && (
         <div className={classes.actionExecutorWrapper}>
-          <h4 className={classes.sectionTitle}>Current Flow</h4>
-          <p className={classes.flowDescription}>{selectedFlow.description}</p>
+          <h4 className={classes.sectionTitle}>Actions</h4>
+          {/* <p className={classes.flowDescription}>{selectedFlow.description}</p> */}
           <ActionExecutor flow={selectedFlow} stepNumber={step.id} />
         </div>
       )}

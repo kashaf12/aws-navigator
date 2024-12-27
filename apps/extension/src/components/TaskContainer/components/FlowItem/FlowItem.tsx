@@ -1,4 +1,4 @@
-import { CheckCircle, AlertCircle, XCircle, ChevronRight } from "lucide-react";
+import { CheckCircle, AlertCircle, XCircle } from "lucide-react";
 import { ValidationStatus } from "@/contexts";
 import { FlowItemProps } from "./types";
 import classes from "./styles.module.css";
@@ -48,8 +48,7 @@ const FlowItem = ({
       aria-selected={isSelected}
     >
       <div className={classes.flowInfo}>
-        <h4 className={classes.flowTitle}>Flow {flow.id}</h4>
-        <p className={classes.flowDescription}>{flow.description}</p>
+        <h4 className={classes.flowTitle}>{flow.description}</h4>
         <div className={classes.flowMetrics}>
           <span className={classes.actionCount}>
             {flow.actions.length} action{flow.actions.length !== 1 ? "s" : ""}
@@ -70,10 +69,6 @@ const FlowItem = ({
         >
           <div className={classes.statusIcon}>{getStatusIcon()}</div>
         </Tooltip>
-        <ChevronRight
-          size={16}
-          className={`${classes.chevron} ${isSelected ? classes.selected : ""}`}
-        />
       </div>
     </button>
   );
