@@ -16,6 +16,8 @@
     cursor: pointer;
     text-align: left;
     color: #374151;
+    gap: 0.5rem;
+    min-width: 0;
 }
 
 .trigger:hover {
@@ -24,7 +26,10 @@
 
 .triggerContent {
     flex: 1;
-    margin-right: 0.5rem;
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
 .chevron {
