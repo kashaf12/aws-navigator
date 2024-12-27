@@ -1,4 +1,4 @@
-import { Task } from "@aws-navigator/schemas";
+import { Step, Task } from "@aws-navigator/schemas";
 
 export const formatDate = (date: Date) => {
   const now = new Date();
@@ -22,9 +22,13 @@ export const formatDate = (date: Date) => {
   }
 };
 
-export const extractUniqueSelectors = (task: Task): string[] => {
+export const extractIdentifiersFromStep = (step: Step) => {
+  return step.ui_elements.flatMap((element) => element.identifier);
+};
+
+export const extractIdentifiersFromTask = (task: Task) => {
   const selectors = task.steps.flatMap((step) =>
-    step.ui_elements.map((element) => element.identifier.css_selector),
+    step.ui_elements.map((element) => element.identifier),
   );
-  return [...new Set(selectors)];
+  return selectors;
 };

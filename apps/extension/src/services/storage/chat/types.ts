@@ -1,6 +1,6 @@
 import { Chat } from "@/types";
 
-export interface StorageManager {
+export interface ChatStorageManager {
   getChats(): Promise<Chat[]>;
   addOrUpdateChat(chat: Chat): Promise<void>;
   deleteChat(chatId: string): Promise<void>;

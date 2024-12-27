@@ -1,7 +1,7 @@
 import { Chat } from "@/types";
-import { StorageManager } from "../types";
+import { ChatStorageManager } from "../types";
 
-class BackendManager implements StorageManager {
+class ChatBackendManager implements ChatStorageManager {
   private BASE_URL = "http://localhost:3000/chats";
   private ACTIVE_CHAT_URL = "http://localhost:3000/activeChat";
 
@@ -39,4 +39,4 @@ class BackendManager implements StorageManager {
   }
 }
 
-export default BackendManager;
+export default ChatBackendManager;

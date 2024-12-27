@@ -34,3 +34,5 @@ export const isIdentifierAvailableSchema = z.object({
 export type isIdentifierAvailableInput = z.infer<
   typeof isIdentifierAvailableSchema
 >;
+
+export type Identifier = z.infer<typeof identifierSchema>;

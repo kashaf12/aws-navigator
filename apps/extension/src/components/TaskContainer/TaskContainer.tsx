@@ -51,7 +51,7 @@ const TaskContainer = () => {
   };
 
   const isChatAvailable = chats.some(
-    (chat) => chat.id === chatReference.chatId
+    (chat) => chat.id === chatReference.chatId,
   );
 
   return (

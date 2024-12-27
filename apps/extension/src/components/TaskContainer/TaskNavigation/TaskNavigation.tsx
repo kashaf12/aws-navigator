@@ -18,7 +18,7 @@ const TaskNavigation = ({
 
   const handleAction = async (
     action: () => Promise<void>,
-    buttonId: string
+    buttonId: string,
   ) => {
     setLoading(buttonId);
     setError(null);

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { stepSchema } from "./step";
 
 export const taskSchema = z.object({
+  id: z.string().describe("A unique identifier for the task."),
   task: z.string().describe("The name or title of the task."),
   steps: z
     .array(stepSchema)

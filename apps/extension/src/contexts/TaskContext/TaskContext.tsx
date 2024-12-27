@@ -1,6 +1,10 @@
-import { createContext, useState } from "react";
-import { Task } from "@aws-navigator/schemas";
-import { TASK_STORAGE_KEY, extractUniqueSelectors } from "@/utils";
+import { createContext, useState, useEffect } from "react";
+import { Identifier, Task } from "@aws-navigator/schemas";
+import {
+  extractIdentifiersFromStep,
+  extractIdentifiersFromTask,
+  findElement,
+} from "@/utils";
 import {
   TaskContextType,
   TaskProviderProps,
@@ -8,88 +12,124 @@ import {
   ActiveTask,
   ChatReference,
 } from "./types";
+import { TaskLocalStorageManager } from "@/services";
 
 export const TaskContext = createContext<TaskContextType | undefined>(
-  undefined
+  undefined,
 );
+
+const storageManager = new TaskLocalStorageManager();
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
   const [currentTask, setCurrentTask] = useState<ActiveTask | null>(null);
 
-  const startTask = (task: Task, chatRef: ChatReference) => {
+  // Load initial task from storage
+  useEffect(() => {
+    const loadActiveTask = async () => {
+      try {
+        const storedTask = await storageManager.getActiveTask();
+        if (storedTask) {
+          setCurrentTask(storedTask);
+          if (storedTask.steps.length > 0) {
+            const selectors = extractIdentifiersFromTask(storedTask);
+            highlightElements(selectors);
+          }
+        }
+      } catch (error) {
+        console.error("[AWS Navigator] Error loading active task:", error);
+      }
+    };
+    loadActiveTask();
+  }, []);
+
+  const startTask = async (task: Task, chatRef: ChatReference) => {
     const activeTask: ActiveTask = {
       ...task,
       status: TaskStatus.IN_PROGRESS,
       currentStepIndex: 0,
       chatReference: chatRef,
     };
-    setCurrentTask(activeTask);
 
-    if (task.steps.length > 0) {
-      const selectors = extractUniqueSelectors(task);
-      highlightElements(selectors);
-    }
+    try {
+      await storageManager.setActiveTask(activeTask);
+      setCurrentTask(activeTask);
 
-    // Save to local storage
-    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(activeTask));
-  };
-
-  const completeStep = (stepIndex: number) => {
-    if (!currentTask) return;
-
-    const isLastStep = stepIndex === currentTask.steps.length - 1;
-    const newStatus = isLastStep
-      ? TaskStatus.COMPLETED
-      : TaskStatus.IN_PROGRESS;
-
-    const updatedTask = {
-      ...currentTask,
-      status: newStatus,
-      currentStepIndex: isLastStep ? stepIndex : stepIndex + 1,
-    };
-
-    setCurrentTask(updatedTask);
-    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(updatedTask));
-
-    // If there's a next step, highlight its elements
-    if (!isLastStep && currentTask.steps[stepIndex + 1]) {
-      const nextStep = currentTask.steps[stepIndex + 1];
-      const selectors = nextStep.ui_elements.map(
-        (element) =>
-          element.identifier.css_selector ||
-          element.identifier.id ||
-          element.identifier.custom_attribute ||
-          element.identifier.text_content ||
-          element.identifier.xpath
-      );
-      highlightElements(selectors as string[]);
+      if (task.steps.length > 0) {
+        const identifiers = extractIdentifiersFromTask(task);
+        highlightElements(identifiers);
+      }
+    } catch (error) {
+      console.error("[AWS Navigator] Error starting task:", error);
     }
   };
 
-  const deleteTask = () => {
-    setCurrentTask(null);
-    localStorage.removeItem(TASK_STORAGE_KEY);
-  };
-
-  const resetTask = () => {
+  const completeStep = async (stepIndex: number) => {
     if (!currentTask) return;
 
-    const updatedTask = {
-      ...currentTask,
-      status: TaskStatus.IN_PROGRESS,
-      currentStepIndex: 0,
-    };
-    setCurrentTask(updatedTask);
-    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(updatedTask));
+    try {
+      const isLastStep = stepIndex === currentTask.steps.length - 1;
+      const newStatus = isLastStep
+        ? TaskStatus.COMPLETED
+        : TaskStatus.IN_PROGRESS;
+
+      const updates = {
+        status: newStatus,
+        currentStepIndex: isLastStep ? stepIndex : stepIndex + 1,
+      };
+
+      await storageManager.updateTaskProgress(currentTask.id, updates);
+
+      setCurrentTask((prev) => (prev ? { ...prev, ...updates } : null));
+
+      // If there's a next step, highlight its elements
+      if (!isLastStep && currentTask.steps[stepIndex + 1]) {
+        const nextStep = currentTask.steps[stepIndex + 1];
+        const identifiers = extractIdentifiersFromStep(nextStep);
+        highlightElements(identifiers);
+      }
+    } catch (error) {
+      console.error("[AWS Navigator] Error completing step:", error);
+    }
   };
 
-  const highlightElements = (selectors: string[]) => {
-    // Implement your highlighting logic here
-    selectors.forEach((selector) => {
-      const element = document.querySelector(selector);
+  const resetTask = async () => {
+    if (!currentTask) return;
+
+    try {
+      const updates = {
+        status: TaskStatus.IN_PROGRESS,
+        currentStepIndex: 0,
+        completedAt: undefined,
+      };
+
+      await storageManager.updateTaskProgress(currentTask.id, updates);
+      setCurrentTask((prev) => (prev ? { ...prev, ...updates } : null));
+    } catch (error) {
+      console.error("[AWS Navigator] Error resetting task:", error);
+    }
+  };
+
+  const deleteTask = async () => {
+    try {
+      await storageManager.clearActiveTask();
+      setCurrentTask(null);
+    } catch (error) {
+      console.error("[AWS Navigator] Error deleting task:", error);
+    }
+  };
+
+  const highlightElements = (identifiers: Identifier[]) => {
+    identifiers.forEach((identifier) => {
+      const element = findElement(identifier);
       if (element) {
-        // Add highlighting effect
-        // You can implement this based on your UI requirements
+        // Add your highlighting effect here
+        // For example:
+        element.classList.add("aws-navigator-highlight");
+      } else {
+        console.warn(
+          "[AWS Navigator] Element not found for identifier:",
+          identifier,
+        );
       }
     });
   };

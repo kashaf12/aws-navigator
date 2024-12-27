@@ -1,4 +1,4 @@
-import { Task } from "@aws-navigator/schemas";
+import { Identifier, Task } from "@aws-navigator/schemas";
 import { ReactNode } from "react";
 
 export interface ChatReference {
@@ -14,6 +14,7 @@ export enum TaskStatus {
 }
 
 export interface ActiveTask extends Task {
+  id: string;
   status: TaskStatus;
   currentStepIndex: number;
   chatReference: ChatReference;
@@ -25,7 +26,7 @@ export interface TaskContextType {
   completeStep: (stepIndex: number) => void;
   resetTask: () => void;
   deleteTask: () => void;
-  highlightElements: (selectors: string[]) => void;
+  highlightElements: (identifier: Identifier[]) => void;
 }
 
 export interface TaskProviderProps {

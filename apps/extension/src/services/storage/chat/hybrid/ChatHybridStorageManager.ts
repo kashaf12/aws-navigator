@@ -1,17 +1,17 @@
 import { Chat } from "@/types";
-import { BackendManager } from "../BackendManager";
-import { LocalStorageManager } from "../LocalStorageManager";
-import { StorageManager } from "../types";
+import { ChatStorageManager } from "../types";
+import { ChatLocalStorageManager } from "../local";
+import { ChatBackendManager } from "../backend";
 
-class HybridStorageManager implements StorageManager {
+class ChatHybridStorageManager implements ChatStorageManager {
   constructor(
-    private localManager: LocalStorageManager,
-    private backendManager: BackendManager,
+    private localManager: ChatLocalStorageManager,
+    private ChatBackendManager: ChatBackendManager,
   ) {}
 
   async getChats(): Promise<Chat[]> {
     try {
-      const chats = await this.backendManager.getChats();
+      const chats = await this.ChatBackendManager.getChats();
       for (const chat of chats) {
         await this.localManager.addOrUpdateChat(chat);
       }
@@ -24,7 +24,7 @@ class HybridStorageManager implements StorageManager {
   async addOrUpdateChat(chat: Chat): Promise<void> {
     await this.localManager.addOrUpdateChat(chat);
     try {
-      await this.backendManager.addOrUpdateChat(chat);
+      await this.ChatBackendManager.addOrUpdateChat(chat);
     } catch (error) {
       console.error("[AWS Navigator] Failed to sync chat with backend", error);
     }
@@ -33,7 +33,7 @@ class HybridStorageManager implements StorageManager {
   async deleteChat(chatId: string): Promise<void> {
     await this.localManager.deleteChat(chatId);
     try {
-      await this.backendManager.deleteChat(chatId);
+      await this.ChatBackendManager.deleteChat(chatId);
     } catch (error) {
       console.error(
         "[AWS Navigator] Failed to delete chat from backend",
@@ -44,7 +44,7 @@ class HybridStorageManager implements StorageManager {
 
   async getActiveChatId(): Promise<string | null> {
     try {
-      const activeId = await this.backendManager.getActiveChatId();
+      const activeId = await this.ChatBackendManager.getActiveChatId();
       await this.localManager.setActiveChatId(activeId);
       return activeId;
     } catch {
@@ -55,7 +55,7 @@ class HybridStorageManager implements StorageManager {
   async setActiveChatId(chatId: string | null): Promise<void> {
     await this.localManager.setActiveChatId(chatId);
     try {
-      await this.backendManager.setActiveChatId(chatId);
+      await this.ChatBackendManager.setActiveChatId(chatId);
     } catch (error) {
       console.error(
         "[AWS Navigator] Failed to sync active chat ID with backend",
@@ -65,4 +65,4 @@ class HybridStorageManager implements StorageManager {
   }
 }
 
-export default HybridStorageManager;
+export default ChatHybridStorageManager;

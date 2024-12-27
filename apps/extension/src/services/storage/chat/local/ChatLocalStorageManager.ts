@@ -1,8 +1,8 @@
 import { Chat } from "@/types";
-import { StorageManager } from "../types";
+import { ChatStorageManager } from "../types";
 import { CHATS_STORAGE_KEY, ACTIVE_CHAT_STORAGE_KEY } from "@/utils";
 
-class LocalStorageManager implements StorageManager {
+class ChatLocalStorageManager implements ChatStorageManager {
   private CHATS_KEY = CHATS_STORAGE_KEY;
   private ACTIVE_CHAT_KEY = ACTIVE_CHAT_STORAGE_KEY;
 
@@ -49,4 +49,4 @@ class LocalStorageManager implements StorageManager {
   }
 }
 
-export default LocalStorageManager;
+export default ChatLocalStorageManager;
