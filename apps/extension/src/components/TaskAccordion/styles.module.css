@@ -53,6 +53,11 @@
     line-height: 1.4;
 }
 
+.stepOptional {
+    flex: 1;
+    color: #6b7280;
+}
+
 .startButton {
     width: 100%;
     padding: 0.75rem;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { identifierSchema } from "./identifier";
 
-export const preConditionSchema = z.object({
+export const postConditionSchema = z.object({
   url: z
     .string()
     .optional()
@@ -10,10 +10,10 @@ export const preConditionSchema = z.object({
     ),
   ui_element: identifierSchema.optional(),
 });
-export const isPreConditionAvailableSchema = z.object({
-  handle: preConditionSchema,
+export const isPostConditionAvailableSchema = z.object({
+  handle: postConditionSchema,
 });
 
-export type isPreConditionAvailableInput = z.infer<
-  typeof isPreConditionAvailableSchema
+export type isPostConditionAvailableInput = z.infer<
+  typeof isPostConditionAvailableSchema
 >;

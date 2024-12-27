@@ -1,8 +1,9 @@
 import classes from "./styles.module.css";
 import { MessageSquare, ListRestart, Trash2 } from "lucide-react";
-import Tooltip from "../../Tooltip";
-import { PositionType } from "../../Navigation";
+
 import { TaskDetailsProps } from "./types";
+import Tooltip from "@/components/Tooltip";
+import { PositionType } from "@/components/Navigation";
 
 const TaskDetails = ({
   task,

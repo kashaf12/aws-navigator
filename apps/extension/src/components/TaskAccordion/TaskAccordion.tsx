@@ -1,12 +1,7 @@
-import { Task } from "@aws-navigator/schemas";
 import classes from "./styles.module.css";
 import Accordion from "../Accordion";
 import { SquarePlay } from "lucide-react";
-
-interface TaskAccordionProps {
-  task: Task;
-  onStartTask: (task: Task) => void;
-}
+import { TaskAccordionProps } from "./types";
 
 const TaskAccordion = ({ task, onStartTask }: TaskAccordionProps) => {
   const trigger = (
@@ -22,10 +17,15 @@ const TaskAccordion = ({ task, onStartTask }: TaskAccordionProps) => {
           <ol className={classes.stepsList}>
             {task.steps.map((step, index) => (
               <li key={index} className={classes.stepItem}>
-                <span className={classes.stepNumber}>{step.step_number}.</span>
+                <span className={classes.stepNumber}>{step.id}.</span>
                 <span className={classes.stepDescription}>
                   {step.description}
                 </span>
+                {step.optional && (
+                  <span className={classes.stepOptional}>
+                    <i>(optional)</i>
+                  </span>
+                )}
               </li>
             ))}
           </ol>

@@ -23,12 +23,12 @@ export const formatDate = (date: Date) => {
 };
 
 export const extractIdentifiersFromStep = (step: Step) => {
-  return step.ui_elements.flatMap((element) => element.identifier);
+  return step.ui_interaction.flatMap((element) => element.identifier);
 };
 
 export const extractIdentifiersFromTask = (task: Task) => {
   const selectors = task.steps.flatMap((step) =>
-    step.ui_elements.map((element) => element.identifier),
+    step.ui_interaction.map((element) => element.identifier)
   );
   return selectors;
 };

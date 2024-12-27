@@ -3,14 +3,15 @@ import classes from "./styles.module.css";
 import { ViewType } from "@/contexts";
 import { useTask, useView, useChats } from "@/hooks";
 import EmptyContainer from "../EmptyContainer";
-import TaskDetails from "./TaskDetails";
-import TaskStepGuide from "./TaskStepGuide";
-import TaskNavigation from "./TaskNavigation";
+import { StepNavigator, TaskNavigation, TaskDetails } from "./components";
 
 const TaskContainer = () => {
   const { currentTask, resetTask, deleteTask, completeStep } = useTask();
   const { setActiveView } = useView();
   const { chats, updateActiveChat } = useChats();
+  const [selectedFlows, setSelectedFlows] = useState<Record<number, number>>(
+    {}
+  );
 
   if (!currentTask) {
     return (
@@ -51,8 +52,15 @@ const TaskContainer = () => {
   };
 
   const isChatAvailable = chats.some(
-    (chat) => chat.id === chatReference.chatId,
+    (chat) => chat.id === chatReference.chatId
   );
+
+  const handleFlowSelect = (stepIndex: number, flowId: number) => {
+    setSelectedFlows((prev) => ({
+      ...prev,
+      [stepIndex]: flowId,
+    }));
+  };
 
   return (
     <div className={classes.progressContainer}>
@@ -63,7 +71,13 @@ const TaskContainer = () => {
         isChatAvailable={isChatAvailable}
         onDelete={deleteTask}
       />
-      <TaskStepGuide task={currentTask} onCompleteStep={console.log} />
+
+      <StepNavigator
+        task={currentTask}
+        selectedFlows={selectedFlows}
+        onFlowSelect={handleFlowSelect}
+      />
+
       <footer className={classes.footer}>
         <TaskNavigation
           currentStep={currentTask.currentStepIndex}

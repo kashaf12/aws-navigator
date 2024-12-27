@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Loader2, SkipForward } from "lucide-react";
-import { PositionType } from "../../Navigation/types";
-import Tooltip from "../../Tooltip";
 import { TaskNavigationProps } from "./types";
 import classes from "./styles.module.css";
+import Tooltip from "@/components/Tooltip";
+import { PositionType } from "@/components/Navigation";
 
 const TaskNavigation = ({
   currentStep,
@@ -18,7 +18,7 @@ const TaskNavigation = ({
 
   const handleAction = async (
     action: () => Promise<void>,
-    buttonId: string,
+    buttonId: string
   ) => {
     setLoading(buttonId);
     setError(null);

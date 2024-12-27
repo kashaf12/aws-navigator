@@ -1,47 +1,12 @@
 import { BackendResponse } from "@/types";
 import { ChatService } from "../types";
 import { Task } from "@aws-navigator/schemas";
+import createS3Bucket from "./tasks/createS3Task.json";
+import deployServerlessWebapp from "./tasks/deployServerlessWebapp.json";
 
 const EXAMPLE_TASKS: Record<string, Task> = {
-  s3_bucket: {
-    id: "s3_bucket",
-    task: "Create an S3 Bucket",
-    steps: [
-      {
-        step_number: 1,
-        description: "Navigate to S3 Console",
-        ui_elements: [
-          {
-            type: "button",
-            identifier: {
-              css_selector: "#nav-service-button-s3",
-            },
-            action: "click",
-          },
-        ],
-        preconditions: {
-          current_url_contains: "console.aws.amazon.com",
-        },
-      },
-      {
-        step_number: 2,
-        description: "Click Create Bucket",
-        ui_elements: [
-          {
-            type: "button",
-            identifier: {
-              css_selector: "#create-bucket-button",
-            },
-            action: "click",
-          },
-        ],
-        preconditions: {
-          current_url_contains: "s3.console.aws.amazon.com",
-        },
-      },
-    ],
-  },
-  // Add more task examples as needed
+  s3_bucket: createS3Bucket as Task,
+  serverless: deployServerlessWebapp as Task,
 };
 
 class MockChat implements ChatService {
@@ -60,6 +25,19 @@ class MockChat implements ChatService {
         
 Source: AWS Documentation - [Creating a bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)`,
         tasks: [EXAMPLE_TASKS.s3_bucket],
+      };
+    }
+
+    if (
+      content.toLowerCase().includes("create serverless") ||
+      content.toLowerCase().includes("serverless")
+    ) {
+      return {
+        success: true,
+        content: `Here's how to create an serverless webapp. I'll guide you through the process.
+        
+Source: AWS Documentation - [serverless](https://docs.aws.amazon.com/AmazonS3/latest/userguide/create-bucket-overview.html)`,
+        tasks: [EXAMPLE_TASKS.serverless],
       };
     }
 

@@ -1,0 +1,154 @@
+{
+  "id": "deploy-serverless-webapp",
+  "task": "Deploy a Serverless Web Application",
+  "steps": [
+    {
+      "id": 1,
+      "description": "Create an S3 Bucket",
+      "pre_conditions": {
+        "url": "s3.console.aws.amazon.com"
+      },
+      "post_conditions": {
+        "ui_element": {
+          "css_selector": "#bucket-created-notification"
+        }
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Create a bucket and configure it for static website hosting",
+          "pre_conditions": {
+            "ui_element": {
+              "css_selector": "#create-bucket-button"
+            }
+          },
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click 'Create Bucket' button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#create-bucket-button"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter bucket name",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "#bucket-name-input"
+                },
+                "manual_intervention": false,
+                "action": "type"
+              }
+            },
+            {
+              "id": 3,
+              "description": "Enable public access",
+              "ui_interaction": {
+                "type": "checkbox",
+                "identifier": {
+                  "css_selector": "#public-access-checkbox"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 4,
+              "description": "Enable static website hosting",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#static-hosting-enable"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 5,
+              "description": "Upload static files",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#upload-files-button"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "description": "Create a DynamoDB Table",
+      "pre_conditions": {
+        "url": "dynamodb.console.aws.amazon.com"
+      },
+      "post_conditions": {
+        "ui_element": {
+          "css_selector": "#table-created-notification"
+        }
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Create DynamoDB table",
+          "pre_conditions": {
+            "ui_element": {
+              "css_selector": "#create-table-button"
+            }
+          },
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click 'Create Table' button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#create-table-button"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter table name",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "#table-name-input"
+                },
+                "manual_intervention": false,
+                "action": "type"
+              }
+            },
+            {
+              "id": 3,
+              "description": "Set partition key",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "#partition-key-input"
+                },
+                "manual_intervention": false,
+                "action": "type"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

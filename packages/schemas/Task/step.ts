@@ -1,23 +1,21 @@
-import { z } from "zod";
-import { uiElementSchema } from "./uiElement";
-import { preconditionSchema } from "./precondition";
+import { optional, z } from "zod";
+import { preConditionSchema } from "./preCondition";
+import { postConditionSchema } from "./postCondition";
+import { flowSchema } from "./flow";
 
 export const stepSchema = z.object({
-  step_number: z
-    .number()
-    .int()
-    .min(1)
-    .describe("The sequence number of the step."),
+  id: z.number().int().min(1).describe("The sequence number of the step."),
   description: z.string().describe("A user-friendly explanation of the step."),
-  ui_elements: z
-    .array(uiElementSchema)
+  pre_conditions: preConditionSchema.optional(),
+  post_conditions: postConditionSchema.optional(),
+  flows: z
+    .array(flowSchema)
     .min(1)
-    .describe("List of UI elements involved in this step."),
-  preconditions: preconditionSchema.optional(),
-  navigation: z
-    .array(z.string())
+    .describe("An ordered list of flows to complete the step."),
+  optional: z
+    .boolean()
     .optional()
-    .describe("Optional navigation guidance if preconditions fail."),
+    .describe("Whether the step is optional or not."),
 });
 
 export const isStepAvailableSchema = z.object({

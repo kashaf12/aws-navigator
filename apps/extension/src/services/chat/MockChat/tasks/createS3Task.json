@@ -1,0 +1,165 @@
+{
+  "id": "create-s3-bucket-with-tags",
+  "task": "Create an S3 Bucket with Optional Tags",
+  "steps": [
+    {
+      "id": 1,
+      "description": "Create an S3 Bucket",
+      "pre_conditions": {
+        "url": "s3.console.aws.amazon.com"
+      },
+      "post_conditions": {
+        "ui_element": {
+          "css_selector": "#bucket-created-notification"
+        }
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Create bucket flow",
+          "pre_conditions": {
+            "ui_element": {
+              "css_selector": "#create-bucket-button"
+            }
+          },
+          "post_conditions": {
+            "ui_element": {
+              "css_selector": "#bucket-created-notification"
+            }
+          },
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click 'Create Bucket' button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#create-bucket-button"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter bucket name",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "#bucket-name-input"
+                },
+                "manual_intervention": false,
+                "action": "type"
+              }
+            },
+            {
+              "id": 3,
+              "description": "Enable bucket public access",
+              "ui_interaction": {
+                "type": "checkbox",
+                "identifier": {
+                  "css_selector": "#enable-public-access"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 4,
+              "description": "Click 'Create' button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#final-create-bucket"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "description": "Add Tags to the Bucket",
+      "optional": true,
+      "pre_conditions": {
+        "url": "s3.console.aws.amazon.com/bucket-details"
+      },
+      "post_conditions": {
+        "ui_element": {
+          "css_selector": "#tags-added-notification"
+        }
+      },
+      "flows": [
+        {
+          "id": 1,
+          "priority": 1,
+          "description": "Add tags flow",
+          "pre_conditions": {
+            "ui_element": {
+              "css_selector": "#add-tags-button"
+            }
+          },
+          "post_conditions": {
+            "ui_element": {
+              "css_selector": "#tags-added-notification"
+            }
+          },
+          "actions": [
+            {
+              "id": 1,
+              "description": "Click 'Add Tags' button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#add-tags-button"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            },
+            {
+              "id": 2,
+              "description": "Enter tag key",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "#tag-key-input"
+                },
+                "manual_intervention": false,
+                "action": "type"
+              }
+            },
+            {
+              "id": 3,
+              "description": "Enter tag value",
+              "ui_interaction": {
+                "type": "input",
+                "identifier": {
+                  "css_selector": "#tag-value-input"
+                },
+                "manual_intervention": false,
+                "action": "type"
+              }
+            },
+            {
+              "id": 4,
+              "description": "Click 'Save Tags' button",
+              "ui_interaction": {
+                "type": "button",
+                "identifier": {
+                  "css_selector": "#save-tags-button"
+                },
+                "manual_intervention": false,
+                "action": "click"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
