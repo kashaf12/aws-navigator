@@ -6,7 +6,7 @@ import { StorageManager } from "../types";
 class HybridStorageManager implements StorageManager {
   constructor(
     private localManager: LocalStorageManager,
-    private backendManager: BackendManager
+    private backendManager: BackendManager,
   ) {}
 
   async getChats(): Promise<Chat[]> {
@@ -37,7 +37,7 @@ class HybridStorageManager implements StorageManager {
     } catch (error) {
       console.error(
         "[AWS Navigator] Failed to delete chat from backend",
-        error
+        error,
       );
     }
   }
@@ -59,7 +59,7 @@ class HybridStorageManager implements StorageManager {
     } catch (error) {
       console.error(
         "[AWS Navigator] Failed to sync active chat ID with backend",
-        error
+        error,
       );
     }
   }

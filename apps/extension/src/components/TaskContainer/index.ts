@@ -1,3 +1,1 @@
-import TaskContainer from "./TaskContainer";
-
-export default TaskContainer;
+export { default } from "./TaskContainer";

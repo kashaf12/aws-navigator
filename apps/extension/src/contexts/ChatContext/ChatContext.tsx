@@ -5,7 +5,7 @@ import { ChatContextType, ChatProviderProps } from "./types";
 import { sortChats, generateChatName } from "@/utils";
 
 export const ChatContext = createContext<ChatContextType | undefined>(
-  undefined
+  undefined,
 );
 const storageManager = new LocalStorageManager();
 const chatService = new MockChat();
@@ -128,7 +128,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     if (!activeChat || activeChat.status === ChatStatus.PENDING) return;
 
     const messageIndex = activeChat.messages.findIndex(
-      (m) => m.id === messageId
+      (m) => m.id === messageId,
     );
     if (messageIndex <= 0) return;
 

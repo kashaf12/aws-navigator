@@ -22,7 +22,7 @@ class LocalStorageManager implements StorageManager {
   async addOrUpdateChat(chat: Chat) {
     const chats = await this.getChats();
     const updatedChats = chats.map((c) =>
-      c.id === chat.id ? { ...c, ...chat } : c
+      c.id === chat.id ? { ...c, ...chat } : c,
     );
     if (!updatedChats.find((c) => c.id === chat.id)) {
       updatedChats.push(chat);

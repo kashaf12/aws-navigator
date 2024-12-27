@@ -8,8 +8,8 @@ export default defineBackground(() => {
     .catch((error: unknown) =>
       console.error(
         "[AWS Navigator] error from side panel backgroundjs:",
-        error
-      )
+        error,
+      ),
     );
 
   // Function to check if tab is AWS and notify sidepanel

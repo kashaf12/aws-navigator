@@ -24,7 +24,7 @@ export const formatDate = (date: Date) => {
 
 export const extractUniqueSelectors = (task: Task): string[] => {
   const selectors = task.steps.flatMap((step) =>
-    step.ui_elements.map((element) => element.identifier.css_selector)
+    step.ui_elements.map((element) => element.identifier.css_selector),
   );
   return [...new Set(selectors)];
 };

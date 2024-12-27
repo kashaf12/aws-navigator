@@ -63,10 +63,10 @@ const Navigation = () => {
   const { updateActiveChat } = useChats();
 
   const topItems = navigationItems.filter(
-    (item) => item.position === PositionType.Top
+    (item) => item.position === PositionType.Top,
   );
   const bottomItems = navigationItems.filter(
-    (item) => item.position === PositionType.Bottom
+    (item) => item.position === PositionType.Bottom,
   );
 
   return (

@@ -10,7 +10,7 @@ import {
 } from "./types";
 
 export const TaskContext = createContext<TaskContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
@@ -55,7 +55,7 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     if (!isLastStep && currentTask.steps[stepIndex + 1]) {
       const nextStep = currentTask.steps[stepIndex + 1];
       const selectors = nextStep.ui_elements.map(
-        (element) => element.identifier.css_selector
+        (element) => element.identifier.css_selector,
       );
       highlightElements(selectors);
     }

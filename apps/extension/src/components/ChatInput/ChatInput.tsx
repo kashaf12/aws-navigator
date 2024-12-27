@@ -4,7 +4,7 @@ import classes from "./styles.module.css";
 
 const ChatInput = (
   { onSendMessage, disabled }: ChatInputProps,
-  ref: ForwardedRef<HTMLInputElement>
+  ref: ForwardedRef<HTMLInputElement>,
 ) => {
   const [message, setMessage] = useState("");
 

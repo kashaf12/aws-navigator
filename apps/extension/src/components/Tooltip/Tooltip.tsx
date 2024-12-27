@@ -103,7 +103,7 @@ const Tooltip = ({
             {content}
             <div className={classes.arrow} />
           </div>,
-          document.body
+          document.body,
         )}
     </div>
   );

@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 import { ViewContextType, ViewProviderProps, ViewType } from "./types";
 
 export const ViewContext = createContext<ViewContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const ViewProvider = ({ children }: ViewProviderProps) => {
