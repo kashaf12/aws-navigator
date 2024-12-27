@@ -1,3 +1,5 @@
+import { TabMessageType, TabStatus } from "@/contexts";
+
 export default defineBackground(() => {
   console.log("[AWS Navigator] Background Service Worker Started", {
     id: browser.runtime.id,
@@ -8,41 +10,56 @@ export default defineBackground(() => {
     .catch((error: unknown) =>
       console.error(
         "[AWS Navigator] error from side panel backgroundjs:",
-        error,
-      ),
+        error
+      )
     );
 
-  // Function to check if tab is AWS and notify sidepanel
-  const checkAndNotifyTabUpdate = async () => {
-    try {
-      // Notify all sidepanel instances about the change
-      chrome.runtime
-        .sendMessage({
-          type: BACKGROUND_MESSAGE_TOPIC.TAB_UPDATE,
-        })
-        .catch((error) => {
-          // Handle error if sidepanel is not open
-          console.log("[AWS Navigator] No sidepanel listening:", error);
-        });
-    } catch (error) {
-      console.error("[AWS Navigator] Error checking tab:", error);
-    }
+  // Function to notify about tab updates
+  const notifyTabUpdate = (
+    tabId: number,
+    changeInfo: chrome.tabs.TabChangeInfo,
+    tab: chrome.tabs.Tab
+  ) => {
+    chrome.runtime.sendMessage({
+      type: TabMessageType.TAB_UPDATE,
+      payload: {
+        tabs: {
+          [tabId]: {
+            id: tabId,
+            url: tab.url || "",
+            status: tab.active ? TabStatus.ACTIVE : TabStatus.INACTIVE,
+            title: tab.title,
+          },
+        },
+      },
+    });
+  };
+
+  // Function to notify about active tab changes
+  const notifyActiveTabUpdate = (activeInfo: chrome.tabs.TabActiveInfo) => {
+    chrome.runtime.sendMessage({
+      type: TabMessageType.ACTIVE_TAB_UPDATE,
+      payload: {
+        activeTabId: activeInfo.tabId,
+      },
+    });
   };
 
   // Listen for tab updates
-  chrome.tabs.onActivated.addListener((activeInfo) => {
-    console.log("[AWS Navigator] Tab Activated:", activeInfo);
-    checkAndNotifyTabUpdate();
-  });
+  chrome.tabs.onUpdated.addListener(notifyTabUpdate);
 
-  // Listen for URL changes in the current tab
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete") {
-      console.log("[AWS Navigator] Tab Updated:", {
-        tabId,
-        url: tab.url,
-      });
-      checkAndNotifyTabUpdate();
-    }
+  // Listen for tab activation
+  chrome.tabs.onActivated.addListener(notifyActiveTabUpdate);
+
+  // Listen for tab removal
+  chrome.tabs.onRemoved.addListener((tabId) => {
+    chrome.runtime.sendMessage({
+      type: TabMessageType.TAB_UPDATE,
+      payload: {
+        tabs: {
+          [tabId]: undefined, // This will remove the tab from the state
+        },
+      },
+    });
   });
 });
