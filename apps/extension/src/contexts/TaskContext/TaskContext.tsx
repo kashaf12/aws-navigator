@@ -10,7 +10,7 @@ import {
 } from "./types";
 
 export const TaskContext = createContext<TaskContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
@@ -55,15 +55,27 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     if (!isLastStep && currentTask.steps[stepIndex + 1]) {
       const nextStep = currentTask.steps[stepIndex + 1];
       const selectors = nextStep.ui_elements.map(
-        (element) => element.identifier.css_selector,
+        (element) => element.identifier.css_selector
       );
       highlightElements(selectors);
     }
   };
 
-  const resetTask = () => {
+  const deleteTask = () => {
     setCurrentTask(null);
     localStorage.removeItem(TASK_STORAGE_KEY);
+  };
+
+  const resetTask = () => {
+    if (!currentTask) return;
+
+    const updatedTask = {
+      ...currentTask,
+      status: TaskStatus.IN_PROGRESS,
+      currentStepIndex: 0,
+    };
+    setCurrentTask(updatedTask);
+    localStorage.setItem(TASK_STORAGE_KEY, JSON.stringify(updatedTask));
   };
 
   const highlightElements = (selectors: string[]) => {
@@ -83,8 +95,9 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
         currentTask,
         startTask,
         completeStep,
-        resetTask,
+        deleteTask,
         highlightElements,
+        resetTask,
       }}
     >
       {children}

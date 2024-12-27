@@ -1,11 +1,5 @@
 import { Task } from "@aws-navigator/schemas";
 
-export interface Step {
-  id: string;
-  description: string;
-  selector?: string;
-}
-
 export enum MessageType {
   USER = "user",
   ASSISTANT = "assistant",

@@ -1,5 +1,5 @@
 import classes from "./styles.module.css";
-import { MessageSquare, ListRestart } from "lucide-react";
+import { MessageSquare, ListRestart, Trash2 } from "lucide-react";
 import Tooltip from "../../Tooltip";
 import { PositionType } from "../../Navigation";
 import { TaskDetailsProps } from "./types";
@@ -9,6 +9,7 @@ const TaskDetails = ({
   onReset,
   onReturnToChat,
   isChatAvailable,
+  onDelete,
 }: TaskDetailsProps) => {
   return (
     <div className={classes.container}>
@@ -32,9 +33,20 @@ const TaskDetails = ({
             </button>
           </Tooltip>
         )}
-        <Tooltip content="Reset Task" position={PositionType.Left} delay={300}>
-          <button onClick={onReset} className={classes.resetButton}>
-            <ListRestart size={16} />
+        {Boolean(task.currentStepIndex) && (
+          <Tooltip
+            content="Reset Task"
+            position={PositionType.Left}
+            delay={300}
+          >
+            <button onClick={onReset} className={classes.resetButton}>
+              <ListRestart size={16} />
+            </button>
+          </Tooltip>
+        )}
+        <Tooltip content="Remove Task" position={PositionType.Left} delay={300}>
+          <button onClick={onDelete} className={classes.resetButton}>
+            <Trash2 size={16} />
           </button>
         </Tooltip>
       </div>

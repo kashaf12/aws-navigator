@@ -7,7 +7,7 @@ import TaskDetails from "./TaskDetails";
 import TaskStepGuide from "./TaskStepGuide";
 
 const TaskContainer = () => {
-  const { currentTask, resetTask } = useTask();
+  const { currentTask, resetTask, deleteTask } = useTask();
   const { setActiveView } = useView();
   const { chats, updateActiveChat } = useChats();
 
@@ -32,9 +32,8 @@ const TaskContainer = () => {
   };
 
   const isChatAvailable = chats.some(
-    (chat) => chat.id === chatReference.chatId,
+    (chat) => chat.id === chatReference.chatId
   );
-
   return (
     <div className={classes.progressContainer}>
       <TaskDetails
@@ -42,6 +41,7 @@ const TaskContainer = () => {
         onReset={resetTask}
         onReturnToChat={handleReturnToChat}
         isChatAvailable={isChatAvailable}
+        onDelete={deleteTask}
       />
       <TaskStepGuide task={currentTask} onCompleteStep={console.log} />
     </div>

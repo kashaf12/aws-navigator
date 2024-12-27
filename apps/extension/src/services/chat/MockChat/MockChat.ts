@@ -4,7 +4,7 @@ import { Task } from "@aws-navigator/schemas";
 
 const EXAMPLE_TASKS: Record<string, Task> = {
   s3_bucket: {
-    task: "Create an S3 BucketCreate an S3 BucketCreate an S3 BucketCreate an S3 BucketCreate an S3 BucketCreate an S3 Bucket",
+    task: "Create an S3 Bucket",
     steps: [
       {
         step_number: 1,

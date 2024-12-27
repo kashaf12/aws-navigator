@@ -25,3 +25,5 @@ export const isStepAvailableSchema = z.object({
 });
 
 export type isStepAvailableInput = z.infer<typeof isStepAvailableSchema>;
+
+export type Step = z.infer<typeof stepSchema>;

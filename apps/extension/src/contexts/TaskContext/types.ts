@@ -24,6 +24,7 @@ export interface TaskContextType {
   startTask: (task: Task, chatRef: ChatReference) => void;
   completeStep: (stepIndex: number) => void;
   resetTask: () => void;
+  deleteTask: () => void;
   highlightElements: (selectors: string[]) => void;
 }
 
