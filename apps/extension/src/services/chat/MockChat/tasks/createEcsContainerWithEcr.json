@@ -15,7 +15,7 @@
         {
           "id": 1,
           "priority": 1,
-          "description": "Navigate to the AWS Management Console",
+          "description": "[New] Navigate to the AWS Management Console",
           "actions": [
             {
               "id": 1,

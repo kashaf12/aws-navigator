@@ -1,17 +1,15 @@
 import { SquarePlay } from "lucide-react";
 import classes from "./styles.module.css";
-import { ViewType } from "@/contexts";
+import { StepProgress, ViewType } from "@/contexts";
 import { useTask, useView, useChats } from "@/hooks";
 import EmptyContainer from "../EmptyContainer";
 import { StepNavigator, TaskNavigation, TaskDetails } from "./components";
 
 const TaskContainer = () => {
-  const { currentTask, resetTask, deleteTask, completeStep } = useTask();
+  const { currentTask, resetTask, deleteTask, completeStep, selectFlow } =
+    useTask();
   const { setActiveView } = useView();
   const { chats, updateActiveChat } = useChats();
-  const [selectedFlows, setSelectedFlows] = useState<Record<number, number>>(
-    {}
-  );
 
   if (!currentTask) {
     return (
@@ -55,12 +53,18 @@ const TaskContainer = () => {
     (chat) => chat.id === chatReference.chatId
   );
 
-  const handleFlowSelect = (stepIndex: number, flowId: number) => {
-    setSelectedFlows((prev) => ({
-      ...prev,
-      [stepIndex]: flowId,
-    }));
-  };
+  const handleFlowSelect = (stepIndex: number, flowId: number) =>
+    selectFlow(flowId, stepIndex);
+
+  const selectedFlows = Object.entries(currentTask.stepProgress).reduce(
+    (acc: Record<number, number>, [key, value]: [string, StepProgress]) => {
+      if (parseInt(key) !== undefined && value?.selectedFlowId !== undefined) {
+        acc[parseInt(key)] = value.selectedFlowId;
+      }
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className={classes.progressContainer}>

@@ -39,40 +39,42 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
   }, []);
 
   const startTask = async (task: Task, chatRef: ChatReference) => {
-    // Initialize the first step's progress
-    const initialStepProgress: StepProgress = {
-      status: TaskStatus.IN_PROGRESS,
-      validationStatus: ValidationStatus.PENDING,
-      flowProgress: task.steps[0].flows.reduce(
-        (acc: Record<number, FlowProgress>, flow) => {
-          acc[flow.id] = {
-            flowId: flow.id,
-            validationStatus: ValidationStatus.PENDING,
-            isSelected: false,
-            actionProgress: flow.actions.reduce(
-              (actionAcc: Record<number, ActionProgress>, action) => {
-                actionAcc[action.id] = {
-                  status: ActionStatus.PENDING,
-                  validationStatus: ValidationStatus.PENDING,
-                };
-                return actionAcc;
-              },
-              {}
-            ),
-          };
-          return acc;
-        },
-        {}
-      ),
-    };
-
     const activeTask: ActiveTask = {
       ...task,
       status: TaskStatus.IN_PROGRESS,
       currentStepIndex: 0,
-      stepProgress: {
-        0: initialStepProgress,
-      },
+      stepProgress: task.steps.reduce(
+        (stepAcc: Record<number, StepProgress>, step, index) => {
+          stepAcc[index] = {
+            status: TaskStatus.IN_PROGRESS,
+            validationStatus: ValidationStatus.PENDING,
+            flowProgress: step.flows.reduce(
+              (acc: Record<number, FlowProgress>, flow) => {
+                acc[flow.id] = {
+                  flowId: flow.id,
+                  validationStatus: ValidationStatus.PENDING,
+                  isSelected: false,
+                  actionProgress: flow.actions.reduce(
+                    (actionAcc: Record<number, ActionProgress>, action) => {
+                      actionAcc[action.id] = {
+                        status: ActionStatus.PENDING,
+                        validationStatus: ValidationStatus.PENDING,
+                      };
+                      return actionAcc;
+                    },
+                    {}
+                  ),
+                };
+                return acc;
+              },
+              {}
+            ),
+          };
+
+          return stepAcc;
+        },
+        {}
+      ),
       chatReference: chatRef,
     };
 
@@ -121,7 +123,9 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
       return ValidationStatus.VALID;
     }
 
-    if (!stepIndex) return ValidationStatus.INVALID; // remove
+    console.info(stepIndex);
+
+    // if (!stepIndex) return ValidationStatus.INVALID; // remove
     // TODO: we'll need to implement these validations in service as a class
 
     // Check pre-conditions
@@ -186,10 +190,11 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     try {
       const step = currentTask.steps[stepIndex];
       const flow = step.flows.find((f) => f.id === flowId);
-
+      console.log({ step, flow });
       if (!flow) return;
 
       const validationStatus = await validateFlow(flow, stepIndex);
+      console.log({ validationStatus, currentTask, stepIndex });
       if (validationStatus === ValidationStatus.INVALID) return;
 
       const updatedStepProgress = {
@@ -210,6 +215,8 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
           [stepIndex]: updatedStepProgress,
         },
       };
+
+      console.log({ updates });
 
       await storageManager.updateTaskProgress(currentTask.id, updates);
       setCurrentTask((prev) => (prev ? { ...prev, ...updates } : null));
