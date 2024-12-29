@@ -1,8 +1,14 @@
+// entrypoints/content.ts
+import { ContentBridge } from "@/services/bridge";
+
 export default defineContentScript({
   matches: ["https://*.console.aws.amazon.com/*"],
-  main() {
+  main(ctx) {
     console.log("[AWS Navigator] Content Script Loaded");
     console.log("[AWS Navigator] Current URL:", window.location.href);
+
+    // Initialize ContentBridge singleton
+    ContentBridge.getInstance(ctx); // [!code ++]
 
     // Listen for page changes within AWS Console
     const observer = new MutationObserver(() => {

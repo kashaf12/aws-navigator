@@ -1,13 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-import {
-  Tab,
-  TabState,
-  TabMessage,
-  TabMessageType,
-  TabContextType,
-  TabProviderProps,
-  TabStatus,
-} from "./types";
+import { sendMessage, onMessage } from "webext-bridge/popup";
+import { TabState, TabContextType, TabProviderProps } from "./types";
 
 export const TabContext = createContext<TabContextType | undefined>(undefined);
 
@@ -18,45 +11,29 @@ export const TabProvider = ({ children }: TabProviderProps) => {
   });
 
   useEffect(() => {
-    const messageListener = (message: TabMessage) => {
-      if (
-        message.type === TabMessageType.TAB_UPDATE ||
-        message.type === TabMessageType.ACTIVE_TAB_UPDATE
-      ) {
-        setTabState((prev) => ({
-          ...prev,
-          ...message.payload,
-        }));
+    // Setup message listener for state updates
+    const unsubscribe = onMessage("tab:state", ({ data }) => {
+      setTabState((prev) => ({
+        ...prev,
+        ...data,
+      }));
+    });
+
+    // Get initial state
+    const initializeState = async () => {
+      try {
+        const state = await sendMessage("tab:query", undefined, "background");
+        setTabState(state);
+      } catch (error) {
+        console.error("[AWS Navigator] Error fetching tab state:", error);
       }
     };
 
-    // Initial state setup
-    chrome.tabs.query({}, (tabs) => {
-      const tabsMap = tabs.reduce(
-        (acc, tab) => {
-          if (tab.id) {
-            acc[tab.id] = {
-              id: tab.id,
-              url: tab.url || "",
-              status: tab.active ? TabStatus.ACTIVE : TabStatus.INACTIVE,
-              title: tab.title,
-            };
-          }
-          return acc;
-        },
-        {} as Record<number, Tab>
-      );
+    initializeState();
 
-      const activeTab = tabs.find((tab) => tab.active);
-      setTabState({
-        activeTabId: activeTab?.id || null,
-        tabs: tabsMap,
-      });
-    });
-
-    chrome.runtime.onMessage.addListener(messageListener);
+    // Cleanup
     return () => {
-      chrome.runtime.onMessage.removeListener(messageListener);
+      unsubscribe();
     };
   }, []);
 

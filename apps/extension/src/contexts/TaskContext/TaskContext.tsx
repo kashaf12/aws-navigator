@@ -12,8 +12,10 @@ import {
   StepProgress,
   ActionProgress,
 } from "./types";
-import { TaskLocalStorageManager } from "@/services";
+import { SidePanelBridge, TaskLocalStorageManager } from "@/services";
 // import { findElement } from "@/utils";
+import { useTabs } from "@/hooks";
+const bridge = SidePanelBridge.getInstance();
 
 export const TaskContext = createContext<TaskContextType | undefined>(
   undefined
@@ -23,6 +25,7 @@ const storageManager = new TaskLocalStorageManager();
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
   const [currentTask, setCurrentTask] = useState<ActiveTask | null>(null);
+  const { activeTabId } = useTabs();
 
   useEffect(() => {
     const loadActiveTask = async () => {
@@ -78,6 +81,31 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
       chatReference: chatRef,
     };
 
+    if (activeTabId) {
+      await bridge.highlightElement(
+        activeTabId,
+        {
+          css_selector: ".listItem-0-1-25",
+        },
+        "show",
+        {
+          styles: {
+            outline: "2px solid red",
+            backgroundColor: "rgba(255, 0, 0, 0.1)",
+          },
+          scrollIntoView: true,
+        }
+      );
+
+      // Remove highlight
+      // await bridge.highlightElement(
+      //   activeTabId,
+      //   {
+      //     css_selector: ".listItem-0-1-25",
+      //   },
+      //   "hide"
+      // );
+    }
     try {
       await storageManager.setActiveTask(activeTask);
       setCurrentTask(activeTask);
@@ -190,11 +218,9 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     try {
       const step = currentTask.steps[stepIndex];
       const flow = step.flows.find((f) => f.id === flowId);
-      console.log({ step, flow });
       if (!flow) return;
 
       const validationStatus = await validateFlow(flow, stepIndex);
-      console.log({ validationStatus, currentTask, stepIndex });
       if (validationStatus === ValidationStatus.INVALID) return;
 
       const updatedStepProgress = {
@@ -215,8 +241,6 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
           [stepIndex]: updatedStepProgress,
         },
       };
-
-      console.log({ updates });
 
       await storageManager.updateTaskProgress(currentTask.id, updates);
       setCurrentTask((prev) => (prev ? { ...prev, ...updates } : null));

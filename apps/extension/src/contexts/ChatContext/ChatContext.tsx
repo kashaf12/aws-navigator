@@ -5,7 +5,7 @@ import { ChatContextType, ChatProviderProps } from "./types";
 import { sortChats, generateChatName } from "@/utils";
 
 export const ChatContext = createContext<ChatContextType | undefined>(
-  undefined,
+  undefined
 );
 const storageManager = new ChatLocalStorageManager();
 const chatService = new MockChat();
@@ -30,7 +30,6 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
   };
 
   const addOrUpdateChat = async (chat: Chat) => {
-    console.log("[AWS Navigator]", chat);
     await storageManager.addOrUpdateChat(chat);
     const updated = await storageManager.getChats();
     setChats(sortChats(updated));
@@ -128,7 +127,7 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     if (!activeChat || activeChat.status === ChatStatus.PENDING) return;
 
     const messageIndex = activeChat.messages.findIndex(
-      (m) => m.id === messageId,
+      (m) => m.id === messageId
     );
     if (messageIndex <= 0) return;
 
